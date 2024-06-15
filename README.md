@@ -49,7 +49,7 @@ completion.choice.message.content # 'Why did the chicken cross the road? To get 
 
 ```ruby
 completion = client.chat.completion({
-  role: OmniAI::OpenAI::Chat::Role::USER,
+  role: OmniAI::Chat::Role::USER,
   content: 'Is it wise to jump off a bridge?'
 })
 completion.choice.message.content # 'No.'
@@ -58,7 +58,7 @@ completion.choice.message.content # 'No.'
 ```ruby
 completion = client.chat.completion([
   {
-    role: OmniAI::OpenAI::Chat::Role::SYSTEM,
+    role: OmniAI::Chat::Role::SYSTEM,
     content: 'You are a helpful assistant.'
   },
   'What is the capital of Canada?',
