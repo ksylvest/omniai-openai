@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniai-openai (1.0.1)
+    omniai-openai (1.0.2)
       event_stream_parser
       omniai
       zeitwerk
@@ -57,7 +57,7 @@ GEM
     parser (3.3.3.0)
       ast (~> 2.4.1)
       racc
-    public_suffix (5.0.5)
+    public_suffix (5.1.0)
     racc (1.8.0)
     rainbow (3.1.1)
     rake (13.2.1)
@@ -103,7 +103,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    zeitwerk (2.6.15)
+    zeitwerk (2.6.16)
 
 PLATFORMS
   aarch64-linux-gnu
