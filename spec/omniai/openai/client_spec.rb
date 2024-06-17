@@ -13,6 +13,10 @@ RSpec.describe OmniAI::OpenAI::Client do
     end
   end
 
+  describe '#connection' do
+    it { expect(client.connection).to be_a(HTTP::Client) }
+  end
+
   describe '#chat' do
     it 'proxies' do
       allow(OmniAI::OpenAI::Chat).to receive(:process!)
@@ -37,8 +41,12 @@ RSpec.describe OmniAI::OpenAI::Client do
     end
   end
 
-  describe '#connection' do
-    it { expect(client.connection).to be_a(HTTP::Client) }
+  describe '#assistants' do
+    it 'proxies' do
+      allow(OmniAI::OpenAI::Assistants).to receive(:new)
+      client.assistants
+      expect(OmniAI::OpenAI::Assistants).to have_received(:new).with(client:)
+    end
   end
 
   describe '#files' do

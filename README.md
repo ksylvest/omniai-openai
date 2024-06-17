@@ -289,3 +289,43 @@ end
 ```ruby
 client.files.destroy!('file_...')
 ```
+
+## Assistants
+
+### Finding an Assistant
+
+```ruby
+client.assistants.find(id: 'asst_...')
+```
+
+### Listing all Assistants
+
+```ruby
+client.assistants.all
+```
+
+### Creating an Assistant
+
+```ruby
+assistant = client.assistants.build
+assistant.name = 'Ringo'
+assistant.model = OmniAI::OpenAI::Chat::Model::GPT_4
+assistant.description = 'The drummer for the Beatles.'
+assistant.save!
+```
+
+### Updating an Assistant
+
+```ruby
+assistant = client.assistants.find(id: 'asst_...')
+assistant.name = 'George'
+assistant.model = OmniAI::OpenAI::Chat::Model::GPT_4
+assistant.description = 'A guitarist for the Beatles.'
+assistant.save!
+```
+
+### Destroying an Assistant
+
+```ruby
+client.assistants.destroy!('asst_...')
+```
