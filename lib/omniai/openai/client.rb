@@ -64,6 +64,20 @@ module OmniAI
       def chat(messages, model: Chat::Model::GPT_4O, temperature: nil, format: nil, stream: nil)
         Chat.process!(messages, model:, temperature:, format:, stream:, client: self)
       end
+
+      # @raise [OmniAI::Error]
+      #
+      # @param path [String]
+      # @param model [String]
+      # @param language [String, nil] optional
+      # @param prompt [String, nil] optional
+      # @param temperature [Float, nil] optional
+      # @param format [Symbol] :text, :srt, :vtt, or :json (default)
+      #
+      # @return text [OmniAI::Transcribe::Transcription]
+      def transcribe(path, model: Transcribe::Model::WHISPER, language: nil, prompt: nil, temperature: nil, format: nil)
+        Transcribe.process!(path, model:, language:, prompt:, temperature:, format:, client: self)
+      end
     end
   end
 end
