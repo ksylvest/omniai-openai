@@ -13,6 +13,8 @@ module OmniAI
         GPT_3_5_TURBO = 'gpt-3.5-turbo'
       end
 
+      DEFAULT_MODEL = Model::GPT_4O
+
       protected
 
       # @return [Hash]

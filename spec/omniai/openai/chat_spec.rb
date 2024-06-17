@@ -6,7 +6,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
   describe '.process!' do
     subject(:completion) { described_class.process!(prompt, client:, model:) }
 
-    let(:model) { described_class::Model::GPT_4O }
+    let(:model) { described_class::DEFAULT_MODEL }
 
     context 'with a string prompt' do
       let(:prompt) { 'Tell me a joke!' }

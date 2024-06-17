@@ -69,7 +69,7 @@ module OmniAI
       # @param stream [Proc, nil] optional
       #
       # @return [OmniAI::Chat::Completion]
-      def chat(messages, model: Chat::Model::GPT_4O, temperature: nil, format: nil, stream: nil)
+      def chat(messages, model: Chat::DEFAULT_MODEL, temperature: nil, format: nil, stream: nil)
         Chat.process!(messages, model:, temperature:, format:, stream:, client: self)
       end
 
@@ -111,6 +111,11 @@ module OmniAI
       # @return [OmniAI::OpenAI::Files]
       def files
         Files.new(client: self)
+      end
+
+      # @return [OmniAI::OpenAI::Assistants]
+      def assistants
+        Assistants.new(client: self)
       end
     end
   end
