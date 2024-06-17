@@ -4,7 +4,7 @@ module OmniAI
   module OpenAI
     # Configuration for managing the OpenAI `api_key` / `organization` / `project` / `logger`.
     class Config < OmniAI::Config
-      attr_accessor :organization, :project, :chat_options
+      attr_accessor :organization, :project, :chat_options, :transcribe_options
 
       def initialize
         super
@@ -13,6 +13,7 @@ module OmniAI
         @project = ENV.fetch('OPENAI_PROJECT', nil)
         @host = ENV.fetch('OPENAI_HOST', 'https://api.openai.com')
         @chat_options = {}
+        @transcribe_options = {}
       end
     end
   end
