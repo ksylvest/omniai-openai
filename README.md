@@ -44,7 +44,7 @@ end
 
 LocalAI offers [built in compatability with the OpenAI specification](https://localai.io/). To initialize a client that points to a Ollama change the host accordingly:
 
-```bash
+```ruby
 client = OmniAI::OpenAI::Client.new(host: 'http://localhost:8080')
 ```
 
@@ -54,7 +54,7 @@ _For details on installation or running LocalAI see the [getting started tutoria
 
 Ollama offers [built in compatability with the OpenAI specification](https://ollama.com/blog/openai-compatibility). To initialize a client that points to a Ollama change the host accordingly:
 
-```bash
+```ruby
 client = OmniAI::OpenAI::Client.new(host: 'http://localhost:11434')
 ```
 
