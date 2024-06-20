@@ -78,6 +78,27 @@ module OmniAI
       def transcribe(path, model: Transcribe::Model::WHISPER, language: nil, prompt: nil, temperature: nil, format: nil)
         Transcribe.process!(path, model:, language:, prompt:, temperature:, format:, client: self)
       end
+
+      # @raise [OmniAI::Error]
+      #
+      # @param input [String] required
+      # @param model [String] optional
+      # @param voice [String] optional
+      # @param speed [Float] optional
+      # @param format [String] optional (default "aac"):
+      #   - "aac"
+      #   - "mp3"
+      #   - "flac"
+      #   - "opus"
+      #   - "pcm"
+      #   - "wav"
+      #
+      # @yield [output] optional
+      #
+      # @return [Tempfile``]
+      def speak(input, model: Speak::Model::TTS_1_HD, voice: Speak::Voice::ALLOY, speed: nil, format: nil, &)
+        Speak.process!(input, model:, voice:, speed:, format:, client: self, &)
+      end
     end
   end
 end
