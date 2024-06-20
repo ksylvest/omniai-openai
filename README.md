@@ -25,7 +25,7 @@ A client may also be passed the following options:
 - `api_key` (required - default is `ENV['OPENAI_API_KEY']`)
 - `organization` (optional)
 - `project` (optional)
-- `host` (optional)
+- `host` (optional) useful for usage with Ollama or LocalAI
 
 ### Configuration
 
@@ -36,9 +36,29 @@ OmniAI::OpenAI.configure do |config|
   config.api_key = 'sk-...' # default: ENV['OPENAI_API_KEY']
   config.organization = '...' # default: ENV['OPENAI_ORGANIZATION']
   config.project = '...' # default: ENV['OPENAI_PROJECT']
-  config.host = '...' # default: 'https://api.openai.com'
+  config.host = '...' # default: 'https://api.openai.com' - override for usage with LocalAI / Ollama
 end
 ```
+
+#### Usage with [LocalAI](https://localai.io/)
+
+LocalAI offers [built in compatability with the OpenAI specification](https://localai.io/). To initialize a client that points to a Ollama change the host accordingly:
+
+```bash
+client = OmniAI::OpenAI::Client.new(host: 'http://localhost:8080')
+```
+
+_For details on installation or running LocalAI see the [getting started tutorial](https://localai.io/basics/getting_started/)._
+
+#### Usage with [Ollama](https://www.ollama.com/)
+
+Ollama offers [built in compatability with the OpenAI specification](https://ollama.com/blog/openai-compatibility). To initialize a client that points to a Ollama change the host accordingly:
+
+```bash
+client = OmniAI::OpenAI::Client.new(host: 'http://localhost:11434')
+```
+
+_For details on installation or running Ollama checkout [the project README](https://github.com/ollama/ollama)._
 
 ### Chat
 
