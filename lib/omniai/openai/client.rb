@@ -33,19 +33,24 @@ module OmniAI
         logger: OmniAI::OpenAI.config.logger,
         host: OmniAI::OpenAI.config.host
       )
-        raise(ArgumentError, %(ENV['OPENAI_API_KEY'] must be defined or `api_key` must be passed)) if api_key.nil?
+        if api_key.nil? && host.eql?(Config::DEFAULT_HOST)
+          raise(
+            ArgumentError,
+            %(ENV['OPENAI_API_KEY'] must be defined or `api_key` must be passed when using #{Config::DEFAULT_HOST})
+          )
+        end
 
-        super(api_key:, logger:)
+        super(api_key:, host:, logger:)
 
         @organization = organization
         @project = project
-        @host = host
       end
 
       # @return [HTTP::Client]
       def connection
         @connection ||= begin
-          http = HTTP.auth("Bearer #{api_key}").persistent(@host)
+          http = HTTP.persistent(@host)
+          http = http.auth("Bearer #{@api_key}") if @api_key
           http = http.headers('OpenAI-Organization': @organization) if @organization
           http = http.headers('OpenAI-Project': @project) if @project
           http
