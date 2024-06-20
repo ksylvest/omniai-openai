@@ -5,6 +5,7 @@ require_relative 'lib/omniai/openai/version'
 Gem::Specification.new do |spec|
   spec.name = 'omniai-openai'
   spec.version = OmniAI::OpenAI::VERSION
+  spec.license = 'MIT'
   spec.authors = ['Kevin Sylvestre']
   spec.email = ['kevin@ksylvest.com']
 
