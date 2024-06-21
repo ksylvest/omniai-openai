@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/ksylvest/omniai-openai.svg?style=svg)](https://circleci.com/gh/ksylvest/omniai-openai)
 
-An OpenAI implementation of the [OmniAI](https://github.com/ksylvest/omniai) APIs.
+An OpenAI implementation of the [OmniAI](https://github.com/ksylvest/omniai) interface supporting ChatGPT, Whisper, Text-to-Voice, Voice-to-Text, and more. This library is community maintained.
 
 ## Installation
 
