@@ -22,16 +22,19 @@ module OmniAI
     class Client < OmniAI::Client
       VERSION = 'v1'
 
-      # @param api_key [String] optional - defaults to `OmniAI::OpenAI.config.api_key`
-      # @param project_id [String] optional - defaults to `OmniAI::OpenAI.config.project`
-      # @param organization_id [String] optional - defaults to `OmniAI::OpenAI.config.organization`
-      # @param logger [Logger] optional - defaults to `OmniAI::OpenAI.config.logger`
+      # @param api_key [String, nil] optional - defaults to `OmniAI::OpenAI.config.api_key`
+      # @param host [String] optional - defaults to `OmniAI::OpenAI.config.host`
+      # @param project [String, nil] optional - defaults to `OmniAI::OpenAI.config.project`
+      # @param organization [String, nil] optional - defaults to `OmniAI::OpenAI.config.organization`
+      # @param logger [Logger, nil] optional - defaults to `OmniAI::OpenAI.config.logger`
+      # @param timeout [Integer, nil] optional - defaults to `OmniAI::OpenAI.config.timeout`
       def initialize(
         api_key: OmniAI::OpenAI.config.api_key,
+        host: OmniAI::OpenAI.config.host,
         organization: OmniAI::OpenAI.config.organization,
         project: OmniAI::OpenAI.config.project,
         logger: OmniAI::OpenAI.config.logger,
-        host: OmniAI::OpenAI.config.host
+        timeout: OmniAI::OpenAI.config.timeout
       )
         if api_key.nil? && host.eql?(Config::DEFAULT_HOST)
           raise(
@@ -40,7 +43,7 @@ module OmniAI
           )
         end
 
-        super(api_key:, host:, logger:)
+        super(api_key:, host:, logger:, timeout:)
 
         @organization = organization
         @project = project
@@ -49,7 +52,7 @@ module OmniAI
       # @return [HTTP::Client]
       def connection
         @connection ||= begin
-          http = HTTP.persistent(@host)
+          http = super
           http = http.auth("Bearer #{@api_key}") if @api_key
           http = http.headers('OpenAI-Organization': @organization) if @organization
           http = http.headers('OpenAI-Project': @project) if @project
