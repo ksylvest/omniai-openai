@@ -34,6 +34,10 @@ module OmniAI
       #   @return [Boolean, nil]
       attr_accessor :deleted
 
+      # @!attribute [r] tools
+      #   @return [Array<Hash>, nil]
+      attr_accessor :tools
+
       # @param client [OmniAI::OpenAI::Client] optional
       # @param id [String]
       # @param name [String]
@@ -48,7 +52,8 @@ module OmniAI
         model: nil,
         description: nil,
         instructions: nil,
-        metadata: {}
+        metadata: {},
+        tools: []
       )
         @client = client
         @id = id
@@ -57,6 +62,7 @@ module OmniAI
         @description = description
         @instructions = instructions
         @metadata = metadata
+        @tools = tools
       end
 
       # @return [String]
@@ -145,7 +151,8 @@ module OmniAI
             model: data['model'],
             description: data['description'],
             instructions: data['instructions'],
-            metadata: data['metadata']
+            metadata: data['metadata'],
+            tools: data['tools']
           )
         end
       end
@@ -159,6 +166,7 @@ module OmniAI
         @description = data['description']
         @instructions = data['instructions']
         @metadata = data['metadata']
+        @tools = data['tools']
       end
 
       # @return [Hash]
@@ -169,6 +177,7 @@ module OmniAI
           description: @description,
           instructions: @instructions,
           metadata: @metadata,
+          tools: @tools,
         }.compact
       end
     end
