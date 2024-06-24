@@ -5,6 +5,20 @@ module OmniAI
     class Thread
       # An OpenAI run within a thread.
       class Run
+        module Status
+          CANCELLED = 'cancelled'
+          FAILED = 'failed'
+          COMPLETED = 'completed'
+          EXPIRED = 'expired'
+        end
+
+        TERMINATED_STATUSES = [
+          Status::CANCELLED,
+          Status::FAILED,
+          Status::COMPLETED,
+          Status::EXPIRED,
+        ].freeze
+
         # @!attribute [rw] id
         #   @return [String, nil]
         attr_accessor :id
@@ -143,6 +157,22 @@ module OmniAI
           self
         end
 
+        # @raise [HTTPError]
+        # @return [OmniAI::OpenAI::Thread]
+        def reload!
+          raise Error, 'unable to fetch! without an ID' unless @id
+
+          response = @client.connection
+            .accept(:json)
+            .headers(HEADERS)
+            .get(path)
+
+          raise HTTPError, response.flush unless response.status.ok?
+
+          parse(data: response.parse)
+          self
+        end
+
         # @raise [OmniAI::Error]
         # @return [OmniAI::OpenAI::Thread]
         def cancel!
@@ -151,6 +181,23 @@ module OmniAI
           data = self.class.cancel!(thread_id: @thread_id, id: @id, client: @client)
           @status = data['status']
           self
+        end
+
+        # @param interval [Integer, Float, nil] optional (seconds)
+        #
+        # @return [OmniAI::OpenAI::Thread::Run]
+        def poll!(delay: 2)
+          loop do
+            reload!
+            break if terminated?
+
+            sleep(delay) if delay
+          end
+        end
+
+        # @return [Boolean]
+        def terminated?
+          TERMINATED_STATUSES.include?(@status)
         end
 
         private

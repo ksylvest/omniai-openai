@@ -437,6 +437,15 @@ run.metadata = { user: 'Ringo' }
 run.save!
 ```
 
+#### Polling a Run
+
+```ruby
+run.terminated? # false
+run.poll!
+run.terminated? # true
+run.status # 'cancelled' / 'failed' / 'completed' / 'expired'
+```
+
 #### Cancelling a Run
 
 ```ruby
