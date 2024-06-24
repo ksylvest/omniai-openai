@@ -11,6 +11,15 @@ RSpec.describe OmniAI::OpenAI::Thread::Run do
     it { expect(inspect).to eql('#<OmniAI::OpenAI::Thread::Run id="run-123">') }
   end
 
+  describe '#terminated?' do
+    it { expect(described_class.new(client:)).not_to be_terminated }
+    it { expect(described_class.new(client:, status: 'running')).not_to be_terminated }
+    it { expect(described_class.new(client:, status: 'cancelled')).to be_terminated }
+    it { expect(described_class.new(client:, status: 'failed')).to be_terminated }
+    it { expect(described_class.new(client:, status: 'completed')).to be_terminated }
+    it { expect(described_class.new(client:, status: 'expired')).to be_terminated }
+  end
+
   describe '.find' do
     subject(:find) { described_class.find(thread_id: 'thread-123', id: 'run-123', client:) }
 
@@ -125,6 +134,48 @@ RSpec.describe OmniAI::OpenAI::Thread::Run do
       end
 
       it { expect { cancel! }.to raise_error(OmniAI::HTTPError) }
+    end
+  end
+
+  describe '#reload!' do
+    subject(:reload!) { run.reload! }
+
+    let(:run) { described_class.new(client:, id: 'run-123', thread_id: 'thread-123', status: 'cancelling') }
+
+    context 'with an OK response' do
+      before do
+        stub_request(:get, 'https://api.openai.com/v1/threads/thread-123/runs/run-123')
+          .to_return_json(body: {
+            id: 'run-123',
+            status: 'cancelled',
+          })
+      end
+
+      it { expect { reload! }.to change(run, :status).from('cancelling').to('cancelled') }
+    end
+
+    context 'with a MISSING response' do
+      before do
+        stub_request(:get, 'https://api.openai.com/v1/threads/thread-123/runs/run-123')
+          .to_return_json(status: 404)
+      end
+
+      it { expect { reload! }.to raise_error(OmniAI::HTTPError) }
+    end
+  end
+
+  describe '#poll!' do
+    subject(:poll!) { run.poll!(delay: 0) }
+
+    let(:run) { described_class.new(client:, id: 'run-123', thread_id: 'thread-123', status: 'running') }
+
+    it 'calls refetch! continuously until the run is terminated' do
+      allow(run).to receive(:terminated?).and_return(false, true)
+      allow(run).to receive(:reload!) { run }
+
+      poll!
+
+      expect(run).to have_received(:reload!).twice
     end
   end
 
