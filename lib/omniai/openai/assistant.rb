@@ -49,7 +49,7 @@ module OmniAI
         client: Client.new,
         id: nil,
         name: nil,
-        model: nil,
+        model: OmniAI::Chat::DEFAULT_MODEL,
         description: nil,
         instructions: nil,
         metadata: {},
