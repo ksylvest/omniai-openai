@@ -6,6 +6,9 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
 
+RSpec/NestedGroups:
+  Enabled: false
+
 RSpec/SpecFilePathFormat:
   CustomTransform:
     OmniAI: omniai
@@ -16,6 +19,15 @@ Layout/FirstHashElementIndentation:
 
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
 
 Metrics/ParameterLists:
   Enabled: false
