@@ -117,6 +117,11 @@ module OmniAI
       def assistants
         Assistants.new(client: self)
       end
+
+      # @return [OmniAI::OpenAI::Threads]
+      def threads
+        Threads.new(client: self)
+      end
     end
   end
 end
