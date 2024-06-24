@@ -3,8 +3,8 @@
 module OmniAI
   module OpenAI
     class Thread
-      # An OpenAI message within a thread.
-      class Message
+      # An OpenAI run within a thread.
+      class Run
         # @!attribute [rw] id
         #   @return [String, nil]
         attr_accessor :id
@@ -17,58 +17,60 @@ module OmniAI
         #   @return [String, nil]
         attr_accessor :thread_id
 
-        # @!attribute [rw] run_id
+        # @!attribute [rw] status
         #   @return [String, nil]
-        attr_accessor :run_id
+        attr_accessor :status
 
-        # @!attribute [rw] role
+        # @!attribute [rw] model
         #   @return [String, nil]
-        attr_accessor :role
+        attr_accessor :model
 
-        # @!attribute [rw] content
-        #   @return [String, Array, nil]
-        attr_accessor :content
+        # @!attribute [rw] temperature
+        #   @return [Float, nil]
+        attr_accessor :temperature
 
-        # @!attribute [rw] attachments
-        #   @return [Array, nil]
-        attr_accessor :attachments
+        # @!attribute [rw] instructions
+        #   @return [String, nil]
+        attr_accessor :instructions
+
+        # @!attribute [rw] tools
+        #   @return [Array<Hash>, nil]
+        attr_accessor :tools
 
         # @!attribute [rw] metadata
-        #   @return [Array, nil]
+        #   @return [Hash, nil]
         attr_accessor :metadata
-
-        # @!attribute [rw] deleted
-        #   @return [Boolean, nil]
-        attr_accessor :deleted
 
         # @param id [String, nil] optional
         # @param assistant_id [String, nil] optional
         # @param thread_id [String, nil] optional
-        # @param run_id [String, nil] optional
-        # @param role [String, nil] optional
-        # @param content [String, Array, nil] optional
-        # @param attachments [Array, nil] optional
+        # @param status [String, nil] optional
+        # @param temperature [Decimal, nil] optional
+        # @param instructions [String, nil] optional
         # @param metadata [Hash, nil] optional
+        # @param tools [Array<Hash>, nil] optional
         # @param client [OmniAI::OpenAI::Client] optional
         def initialize(
           id: nil,
           assistant_id: nil,
           thread_id: nil,
-          run_id: nil,
-          role: nil,
-          content: nil,
-          attachments: [],
+          status: nil,
+          model: nil,
+          temperature: nil,
+          instructions: nil,
           metadata: {},
+          tools: [],
           client: Client.new
         )
           @id = id
           @assistant_id = assistant_id
           @thread_id = thread_id
-          @run_id = run_id
-          @role = role
-          @content = content
-          @attachments = attachments
+          @status = status
+          @model = model
+          @temperature = temperature
+          @instructions = instructions
           @metadata = metadata
+          @tools = tools
           @client = client
         end
 
@@ -78,21 +80,20 @@ module OmniAI
             "id=#{@id.inspect}",
             ("assistant_id=#{@assistant_id.inspect}" if @assistant_id),
             ("thread_id=#{@thread_id.inspect}" if @thread_id),
-            ("content=#{@content.inspect}" if @content),
+            ("status=#{@status.inspect}" if @status),
           ].compact
-
           "#<#{self.class.name} #{props.join(' ')}>"
         end
 
         # @param thread_id [String] required
         # @param id [String] required
         # @param client [OmniAI::OpenAI::Client] optional
-        # @return [OmniAI::OpenAI::Thread::Message]
+        # @return [OmniAI::OpenAI::Thread::Run]
         def self.find(thread_id:, id:, client: Client.new)
           response = client.connection
             .accept(:json)
             .headers(HEADERS)
-            .get("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/messages/#{id}")
+            .get("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/runs/#{id}")
 
           raise HTTPError, response.flush unless response.status.ok?
 
@@ -101,12 +102,12 @@ module OmniAI
 
         # @param thread_id [String] required
         # @param client [OmniAI::OpenAI::Client] optional
-        # @return [Array<OmniAI::OpenAI::Thread::Message>]
+        # @return [Array<OmniAI::OpenAI::Thread::Run>]
         def self.all(thread_id:, limit: nil, client: Client.new)
           response = client.connection
             .accept(:json)
             .headers(HEADERS)
-            .get("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/messages", params: { limit: }.compact)
+            .get("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/runs", params: { limit: }.compact)
 
           raise HTTPError, response.flush unless response.status.ok?
 
@@ -117,11 +118,11 @@ module OmniAI
         # @param id [String] required
         # @param client [OmniAI::OpenAI::Client] optional
         # @return [Hash]
-        def self.destroy!(thread_id:, id:, client: Client.new)
+        def self.cancel!(thread_id:, id:, client: Client.new)
           response = client.connection
             .accept(:json)
             .headers(HEADERS)
-            .delete("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/messages/#{id}")
+            .post("/#{OmniAI::OpenAI::Client::VERSION}/threads/#{thread_id}/runs/#{id}/cancel")
 
           raise HTTPError, response.flush unless response.status.ok?
 
@@ -144,11 +145,11 @@ module OmniAI
 
         # @raise [OmniAI::Error]
         # @return [OmniAI::OpenAI::Thread]
-        def destroy!
-          raise OmniAI::Error, 'cannot destroy a non-persisted thread' unless @id
+        def cancel!
+          raise OmniAI::Error, 'cannot cancel a non-persisted thread' unless @id
 
-          data = self.class.destroy!(thread_id: @thread_id, id: @id, client: @client)
-          @deleted = data['deleted']
+          data = self.class.cancel!(thread_id: @thread_id, id: @id, client: @client)
+          @status = data['status']
           self
         end
 
@@ -166,10 +167,11 @@ module OmniAI
               id: data['id'],
               assistant_id: data['assistant_id'],
               thread_id: data['thread_id'],
-              run_id: data['run_id'],
-              role: data['role'],
-              content: data['content'],
-              attachments: data['attachments'],
+              status: data['status'],
+              model: data['model'],
+              temperature: data['temperature'],
+              instructions: data['instructions'],
+              tools: data['tools'],
               metadata: data['metadata']
             )
           end
@@ -179,27 +181,31 @@ module OmniAI
         def parse(data:)
           @id = data['id']
           @assistant_id = data['assistant_id']
-          @thread_id =  data['thread_id']
-          @run_id =  data['run_id']
-          @role =  data['role']
-          @content = data['content']
-          @attachments = data['attachments']
-          @metadata =  data['metadata']
+          @thread_id = data['thread_id']
+          @run_id = data['run_id']
+          @status = data['status']
+          @model = data['model']
+          @temperature = data['temperature']
+          @instructions = data['instructions']
+          @tools = data['tools']
+          @metadata = data['metadata']
         end
 
         # @return [Hash]
         def payload
           {
-            role: @role,
-            content: @content,
-            attachments: @attachments,
+            assistant_id: @assistant_id,
+            model: @model,
+            temperature: @temperature,
+            instructions: @instructions,
+            tools: @tools,
             metadata: @metadata,
           }.compact
         end
 
         # @return [String]
         def path
-          "/#{OmniAI::OpenAI::Client::VERSION}/threads/#{@thread_id}/messages#{"/#{@id}" if @id}"
+          "/#{OmniAI::OpenAI::Client::VERSION}/threads/#{@thread_id}/runs#{"/#{@id}" if @id}"
         end
       end
     end

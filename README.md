@@ -392,3 +392,45 @@ thread = client.threads.find(id: 'thread_...')
 message = thread.messages.build(role: 'user', content: 'Hello?')
 message.save!
 ```
+
+### Runs
+
+#### Finding a Run
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+run = thread.runs.find(id: 'run_...')
+run.save!
+```
+
+#### Listing all Runs
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+thread.runs.all
+```
+
+#### Creating a Run
+
+```ruby
+run = client.runs.find(id: 'thread_...')
+run = thread.runs.build
+run.metadata = { user: 'Ringo' }
+run.save!
+```
+
+#### Updating a Run
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+run = thread.messages.find(id: 'run_...')
+run.metadata = { user: 'Ringo' }
+run.save!
+```
+
+#### Cancelling a Run
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+run = thread.runs.cancel!(id: 'run_...')
+```
