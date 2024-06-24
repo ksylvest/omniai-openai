@@ -268,8 +268,17 @@ client.files.all
 
 ### Uploading a File
 
+#### Using a File
+
 ```ruby
-file = client.files.build(io: File.open('...', 'wb'))
+file = client.files.build(io: File.open('demo.pdf', 'wb'))
+file.save!
+```
+
+#### Using a Path
+
+```ruby
+file = client.files.build(io: 'demo.pdf'))
 file.save!
 ```
 
