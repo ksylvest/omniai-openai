@@ -93,6 +93,11 @@ module OmniAI
         self
       end
 
+      # @return [OmniAI::OpenAI::Thread::Messages]
+      def messages
+        Messages.new(client: @client, thread: self)
+      end
+
       private
 
       class << self

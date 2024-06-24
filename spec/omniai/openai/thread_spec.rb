@@ -145,4 +145,16 @@ RSpec.describe OmniAI::OpenAI::Thread do
       end
     end
   end
+
+  describe '#messages' do
+    subject(:messages) { thread.messages }
+
+    let(:thread) { described_class.new(client:) }
+
+    it 'proxies' do
+      allow(OmniAI::OpenAI::Thread::Messages).to receive(:new)
+      messages
+      expect(OmniAI::OpenAI::Thread::Messages).to have_received(:new).with(thread:, client:)
+    end
+  end
 end
