@@ -14,7 +14,7 @@ module OmniAI
 
         # @param limit [Integer] optional
         # @return [Array<OmniAI::Thread::Message>]
-        def all(limit:)
+        def all(limit: nil)
           Message.all(thread_id: @thread.id, limit:, client: @client)
         end
 
