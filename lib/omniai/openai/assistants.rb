@@ -29,8 +29,9 @@ module OmniAI
       # @param description [String, nil] optional
       # @param instructions [String,nil] optional
       # @param metadata [Hash] optional
-      def build(name: nil, description: nil, instructions: nil, model: Chat::Model, metadata: {})
-        Assistant.new(name:, model:, description:, instructions:, metadata:, client: @client)
+      # @param tools [Array<Hash>] optional
+      def build(name: nil, description: nil, instructions: nil, model: Chat::Model, metadata: {}, tools: [])
+        Assistant.new(name:, model:, description:, instructions:, metadata:, tools:, client: @client)
       end
     end
   end
