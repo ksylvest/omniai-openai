@@ -251,3 +251,41 @@ client.speak('A pessemistic pest exists amidst us.', format: OmniAI::OpenAI::Spe
 ```
 
 [OpenAI API Reference `format`](https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-response_format)
+
+## Files
+
+### Finding an File
+
+```ruby
+client.files.find(id: 'file_...')
+```
+
+### Listing all Files
+
+```ruby
+client.files.all
+```
+
+### Uploading a File
+
+```ruby
+file = client.files.build(io: File.open('...', 'wb'))
+file.save!
+```
+
+### Downloading a File
+
+```ruby
+file = client.files.find(id: 'file_...')
+File.open('...', 'wb') do |file|
+  file.content do |chunk|
+    file << chunk
+  end
+end
+```
+
+### Destroying a File
+
+```ruby
+client.files.destroy!('file_...')
+```

@@ -107,6 +107,11 @@ module OmniAI
       def speak(input, model: Speak::Model::TTS_1_HD, voice: Speak::Voice::ALLOY, speed: nil, format: nil, &)
         Speak.process!(input, model:, voice:, speed:, format:, client: self, &)
       end
+
+      # @return [OmniAI::OpenAI::Files]
+      def files
+        Files.new(client: self)
+      end
     end
   end
 end

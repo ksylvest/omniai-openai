@@ -40,4 +40,12 @@ RSpec.describe OmniAI::OpenAI::Client do
   describe '#connection' do
     it { expect(client.connection).to be_a(HTTP::Client) }
   end
+
+  describe '#files' do
+    it 'proxies' do
+      allow(OmniAI::OpenAI::Files).to receive(:new)
+      client.files
+      expect(OmniAI::OpenAI::Files).to have_received(:new).with(client:)
+    end
+  end
 end
