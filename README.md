@@ -329,3 +329,33 @@ assistant.save!
 ```ruby
 client.assistants.destroy!('asst_...')
 ```
+
+## Threads
+
+### Finding a Thread
+
+```ruby
+client.threads.find(id: 'thread_...')
+```
+
+### Creating a Thread
+
+```ruby
+thread = client.threads.build
+thread.metadata = { user: 'Ringo' }
+thread.save!
+```
+
+### Updating a Thread
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+thread.metadata = { user: 'Ringo' }
+thread.save!
+```
+
+### Destroying a Threads
+
+```ruby
+client.threads.destroy!('thread_...')
+```
