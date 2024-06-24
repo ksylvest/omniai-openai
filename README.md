@@ -359,3 +359,36 @@ thread.save!
 ```ruby
 client.threads.destroy!('thread_...')
 ```
+
+### Messages
+
+#### Finding a Message
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+message = thread.messages.find(id: 'msg_...')
+message.save!
+```
+
+#### Listing all Messages
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+thread.messages.all
+```
+
+#### Creating a Message
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+message = thread.messages.build(role: 'user', content: 'Hello?')
+message.save!
+```
+
+#### Updating a Message
+
+```ruby
+thread = client.threads.find(id: 'thread_...')
+message = thread.messages.build(role: 'user', content: 'Hello?')
+message.save!
+```
