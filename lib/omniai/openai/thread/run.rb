@@ -183,7 +183,7 @@ module OmniAI
           self
         end
 
-        # @param interval [Integer, Float, nil] optional (seconds)
+        # @param delay [Numeric, nil] optional (seconds)
         #
         # @return [OmniAI::OpenAI::Thread::Run]
         def poll!(delay: 2)

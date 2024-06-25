@@ -82,7 +82,7 @@ module OmniAI
       # @param temperature [Float, nil] optional
       # @param format [Symbol] :text, :srt, :vtt, or :json (default)
       #
-      # @return text [OmniAI::Transcribe::Transcription]
+      # @return [OmniAI::Transcribe]
       def transcribe(path, model: Transcribe::Model::WHISPER, language: nil, prompt: nil, temperature: nil, format: nil)
         Transcribe.process!(path, model:, language:, prompt:, temperature:, format:, client: self)
       end

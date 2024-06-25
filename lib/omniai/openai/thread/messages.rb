@@ -34,7 +34,6 @@ module OmniAI
         # @param content [String, Array, nil] optional
         # @param attachments [Array, nil] optional
         # @param metadata [Hash, nil] optional
-        # @param client [OmniAI::OpenAI::Client] optional
         # @return [OmniAI::OpenAI::Thread::Message]
         def build(role: nil, content: nil, attachments: [], metadata: {})
           Message.new(role:, content:, attachments:, metadata:, thread_id: @thread.id, client: @client)
