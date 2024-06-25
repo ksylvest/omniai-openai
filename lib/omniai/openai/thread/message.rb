@@ -168,8 +168,8 @@ module OmniAI
               thread_id: data['thread_id'],
               run_id: data['run_id'],
               role: data['role'],
-              content: data['content'],
-              attachments: data['attachments'],
+              content: Content.for(data: data['content'], client:),
+              attachments: Attachment.for(data: data['attachments'], client:),
               metadata: data['metadata']
             )
           end
@@ -181,9 +181,9 @@ module OmniAI
           @assistant_id = data['assistant_id']
           @thread_id =  data['thread_id']
           @run_id =  data['run_id']
-          @role =  data['role']
-          @content = data['content']
-          @attachments = data['attachments']
+          @role = data['role']
+          @content = Content.for(data: data['content'], client: @client)
+          @attachments = Attachment.for(data: data['content'], client: @client)
           @metadata =  data['metadata']
         end
 
