@@ -3,6 +3,14 @@
 module OmniAI
   module OpenAI
     # An OpenAI chat implementation.
+    #
+    # Usage:
+    #
+    #   completion = OmniAI::OpenAI::Chat.process!(client: client) do |prompt|
+    #     prompt.system('You are an expert in the field of AI.')
+    #     prompt.user('What are the biggest risks of AI?')
+    #   end
+    #   completion.choice.message.content # '...'
     class Chat < OmniAI::Chat
       JSON_RESPONSE_FORMAT = { type: 'json_object' }.freeze
 
@@ -20,7 +28,7 @@ module OmniAI
       # @return [Hash]
       def payload
         OmniAI::OpenAI.config.chat_options.merge({
-          messages:,
+          messages: @prompt.serialize,
           model: @model,
           stream: @stream.nil? ? nil : !@stream.nil?,
           temperature: @temperature,

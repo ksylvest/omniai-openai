@@ -8,7 +8,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
 
     let(:model) { described_class::DEFAULT_MODEL }
 
-    context 'with a string prompt' do
+    context 'with a basic prompt' do
       let(:prompt) { 'Tell me a joke!' }
 
       before do
@@ -32,12 +32,12 @@ RSpec.describe OmniAI::OpenAI::Chat do
       it { expect(completion.choice.message.content).to eql('Two elephants fall off a cliff. Boom! Boom!') }
     end
 
-    context 'with an array prompt' do
+    context 'with an advanced prompt' do
       let(:prompt) do
-        [
-          { role: OmniAI::Chat::Role::SYSTEM, content: 'You are a helpful assistant.' },
-          { role: OmniAI::Chat::Role::USER, content: 'What is the capital of Canada?' },
-        ]
+        OmniAI::Chat::Prompt.build do |prompt|
+          prompt.system('You are a helpful assistant.')
+          prompt.user('What is the capital of Canada?')
+        end
       end
 
       before do
@@ -96,10 +96,10 @@ RSpec.describe OmniAI::OpenAI::Chat do
       subject(:completion) { described_class.process!(prompt, client:, model:, format: :json) }
 
       let(:prompt) do
-        [
-          { role: OmniAI::Chat::Role::SYSTEM, content: OmniAI::Chat::JSON_PROMPT },
-          { role: OmniAI::Chat::Role::USER, content: 'What is the name of the dummer for the Beatles?' },
-        ]
+        OmniAI::Chat::Prompt.build do |prompt|
+          prompt.system(OmniAI::Chat::JSON_PROMPT)
+          prompt.user('What is the name of the dummer for the Beatles?')
+        end
       end
 
       before do
@@ -155,6 +155,51 @@ RSpec.describe OmniAI::OpenAI::Chat do
         completion
         expect(chunks.map { |chunk| chunk.choice.delta.content }).to eql(%w[A B])
       end
+    end
+
+    context 'when using files / URLs' do
+      let(:io) { Tempfile.new }
+
+      let(:prompt) do
+        OmniAI::Chat::Prompt.build do |prompt|
+          prompt.user do |message|
+            message.text('What are these photos of?')
+            message.url('https://localhost/cat.jpg', 'image/jpeg')
+            message.url('https://localhost/dog.jpg', 'image/jpeg')
+            message.file(io, 'image/jpeg')
+          end
+        end
+      end
+
+      before do
+        stub_request(:post, 'https://api.openai.com/v1/chat/completions')
+          .with(body: {
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  { type: 'text', text: 'What are these photos of?' },
+                  { type: 'image_url', image_url: { url: 'https://localhost/cat.jpg' } },
+                  { type: 'image_url', image_url: { url: 'https://localhost/dog.jpg' } },
+                  { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,' } },
+                ],
+              },
+            ],
+            model:,
+          })
+          .to_return_json(body: {
+            choices: [{
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: 'They are a photo of a cat and a photo of a dog.',
+              },
+            }],
+          })
+      end
+
+      it { expect(completion.choice.message.role).to eql('assistant') }
+      it { expect(completion.choice.message.content).to eql('They are a photo of a cat and a photo of a dog.') }
     end
   end
 end
