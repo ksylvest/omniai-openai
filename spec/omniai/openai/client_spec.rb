@@ -25,6 +25,14 @@ RSpec.describe OmniAI::OpenAI::Client do
     end
   end
 
+  describe '#embed' do
+    it 'proxies' do
+      allow(OmniAI::OpenAI::Embed).to receive(:process!)
+      client.embed('Hello!')
+      expect(OmniAI::OpenAI::Embed).to have_received(:process!)
+    end
+  end
+
   describe '#transcribe' do
     it 'proxies' do
       allow(OmniAI::OpenAI::Transcribe).to receive(:process!)

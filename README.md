@@ -441,3 +441,12 @@ run.status # 'cancelled' / 'failed' / 'completed' / 'expired'
 thread = client.threads.find(id: 'thread_...')
 run = thread.runs.cancel!(id: 'run_...')
 ```
+
+### Embed
+
+Text can be converted into a vector embedding for similarity comparison usage via:
+
+```ruby
+response = client.embed('The quick brown fox jumps over a lazy dog.')
+response.embedding # [0.0, ...]
+```

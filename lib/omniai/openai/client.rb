@@ -79,6 +79,14 @@ module OmniAI
 
       # @raise [OmniAI::Error]
       #
+      # @param input [String, Array<String>, Array<Integer>] required
+      # @param model [String] optional
+      def embed(input, model: Embed::DEFAULT_MODEL)
+        Embed.process!(input, model:, client: self)
+      end
+
+      # @raise [OmniAI::Error]
+      #
       # @param path [String]
       # @param model [String]
       # @param language [String, nil] optional
