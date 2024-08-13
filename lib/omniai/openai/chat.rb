@@ -34,7 +34,7 @@ module OmniAI
           stream: @stream.nil? ? nil : !@stream.nil?,
           temperature: @temperature,
           response_format: (JSON_RESPONSE_FORMAT if @format.eql?(:json)),
-          tools: @tools&.map(&:prepare),
+          tools: @tools&.map(&:serialize),
         }).compact
       end
 
