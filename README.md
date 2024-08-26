@@ -48,6 +48,12 @@ LocalAI offers [built in compatability with the OpenAI specification](https://lo
 client = OmniAI::OpenAI::Client.new(host: 'http://localhost:8080', api_key: nil)
 ```
 
+You can also use the convience alias like so:
+
+```ruby
+client = OmniAI::LocalAI::Client.new
+```
+
 _For details on installation or running LocalAI see the [getting started tutorial](https://localai.io/basics/getting_started/)._
 
 #### Usage with [Ollama](https://www.ollama.com/)
@@ -56,6 +62,11 @@ Ollama offers [built in compatability with the OpenAI specification](https://oll
 
 ```ruby
 client = OmniAI::OpenAI::Client.new(host: 'http://localhost:11434', api_key: nil)
+```
+You can also use the convenience alias OmniAI::Ollama like so:
+
+```ruby
+client = OmniAI::Ollama::Client.new
 ```
 
 _For details on installation or running Ollama checkout [the project README](https://github.com/ollama/ollama)._
