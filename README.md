@@ -23,9 +23,10 @@ client = OmniAI::OpenAI::Client.new
 A client may also be passed the following options:
 
 - `api_key` (required - default is `ENV['OPENAI_API_KEY']`)
+- `api_prefix` (optional) - used with a host when necessary
 - `organization` (optional)
 - `project` (optional)
-- `host` (optional) useful for usage with Ollama or LocalAI
+- `host` (optional) useful for usage with Ollama, LocalAI or other OpenAI API compatible services
 
 ### Configuration
 
@@ -62,7 +63,7 @@ _For details on installation or running Ollama checkout [the project README](htt
 
 #### Usage with [OpenRouter](https://open_router.ai/)
 
-Other fee-based systems/services have adopted all or some of the OpenAI API.  For example [open_router.ai](https://open_router.ai) is a web-services that access to many models and providers using their own as well as an OpenAI API.
+Other fee-based systems/services have adopted all or some of the OpenAI API.  For example [open_router.ai](https://open_router.ai) is a web-services that provides access to many models and providers using their own as well as an OpenAI API.
 
 ```ruby
 client  = OmniAI::OpenAI::Client.new(
