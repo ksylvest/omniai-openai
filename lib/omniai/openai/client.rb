@@ -22,7 +22,10 @@ module OmniAI
     class Client < OmniAI::Client
       VERSION = 'v1'
 
+      attr_reader :api_prefix
+
       # @param api_key [String, nil] optional - defaults to `OmniAI::OpenAI.config.api_key`
+      # @param api_prefix [String, nil] optional - defaults to empty string
       # @param host [String] optional - defaults to `OmniAI::OpenAI.config.host`
       # @param project [String, nil] optional - defaults to `OmniAI::OpenAI.config.project`
       # @param organization [String, nil] optional - defaults to `OmniAI::OpenAI.config.organization`
@@ -30,6 +33,7 @@ module OmniAI
       # @param timeout [Integer, nil] optional - defaults to `OmniAI::OpenAI.config.timeout`
       def initialize(
         api_key: OmniAI::OpenAI.config.api_key,
+        api_prefix: '',
         host: OmniAI::OpenAI.config.host,
         organization: OmniAI::OpenAI.config.organization,
         project: OmniAI::OpenAI.config.project,
@@ -47,6 +51,11 @@ module OmniAI
 
         @organization = organization
         @project = project
+
+        @api_prefix = api_prefix
+        return if @api_prefix.empty? || @api_prefix.start_with('/')
+
+        @api_prefix.prepend('/')
       end
 
       # @return [HTTP::Client]

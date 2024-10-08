@@ -252,7 +252,7 @@ module OmniAI
 
         # @return [String]
         def path
-          "/#{OmniAI::OpenAI::Client::VERSION}/threads/#{@thread_id}/runs#{"/#{@id}" if @id}"
+          "#{@client.api_prefix}/#{OmniAI::OpenAI::Client::VERSION}/threads/#{@thread_id}/runs#{"/#{@id}" if @id}"
         end
       end
     end
