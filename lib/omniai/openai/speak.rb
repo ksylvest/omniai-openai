@@ -30,7 +30,7 @@ module OmniAI
 
       # @return [String]
       def path
-        "/#{OmniAI::OpenAI::Client::VERSION}/audio/speech"
+        "#{@client.api_prefix}/#{OmniAI::OpenAI::Client::VERSION}/audio/speech"
       end
     end
   end

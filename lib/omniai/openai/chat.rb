@@ -42,7 +42,7 @@ module OmniAI
 
       # @return [String]
       def path
-        "/#{OmniAI::OpenAI::Client::VERSION}/chat/completions"
+        "#{@client.api_prefix}/#{OmniAI::OpenAI::Client::VERSION}/chat/completions"
       end
     end
   end
