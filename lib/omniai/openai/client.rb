@@ -53,7 +53,7 @@ module OmniAI
         @project = project
 
         @api_prefix = api_prefix
-        return if @api_prefix.empty? || @api_prefix.start_with('/')
+        return if @api_prefix.empty? || @api_prefix.start_with?('/')
 
         @api_prefix.prepend('/')
       end
