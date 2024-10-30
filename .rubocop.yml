@@ -4,7 +4,6 @@ require:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.3
 
 RSpec/NestedGroups:
   Enabled: false
