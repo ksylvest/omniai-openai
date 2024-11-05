@@ -1,6 +1,10 @@
 # OmniAI::OpenAI
 
-[![CircleCI](https://circleci.com/gh/ksylvest/omniai-openai.svg?style=svg)](https://circleci.com/gh/ksylvest/omniai-openai)
+[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ksylvest/omniai-openai/blob/main/LICENSE)
+[![RubyGems](https://img.shields.io/gem/v/omniai-openai)](https://rubygems.org/gems/omniai-openai)
+[![GitHub](https://img.shields.io/badge/github-repo-blue.svg)](https://github.com/ksylvest/omniai-openai)
+[![Yard](https://img.shields.io/badge/docs-site-blue.svg)](https://omniai-openai.ksylvest.com)
+[![CircleCI](https://img.shields.io/circleci/build/github/ksylvest/omniai-openai)](https://circleci.com/gh/ksylvest/omniai-openai)
 
 An OpenAI implementation of the [OmniAI](https://github.com/ksylvest/omniai) interface supporting ChatGPT, Whisper, Text-to-Voice, Voice-to-Text, and more. This library is community maintained.
 
@@ -63,12 +67,12 @@ _For details on installation or running Ollama checkout [the project README](htt
 
 #### Usage with [OpenRouter](https://open_router.ai/)
 
-Other fee-based systems/services have adopted all or some of the OpenAI API.  For example [open_router.ai](https://open_router.ai) is a web-services that provides access to many models and providers using their own as well as an OpenAI API.
+Other fee-based systems/services have adopted all or some of the OpenAI API. For example [open_router.ai](https://open_router.ai) is a web-services that provides access to many models and providers using their own as well as an OpenAI API.
 
 ```ruby
 client  = OmniAI::OpenAI::Client.new(
-            host:       'https://open_router.ai', 
-            api_key:    ENV['OPENROUTER_API_KEY'], 
+            host:       'https://open_router.ai',
+            api_key:    ENV['OPENROUTER_API_KEY'],
             api_prefix: '/api')
 ```
 
