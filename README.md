@@ -97,7 +97,7 @@ completion.content # 'The capital of Canada is Ottawa.'
 
 #### Model
 
-`model` takes an optional string (default is `gtp-4o`):
+`model` takes an optional string (default is `gpt-4o`):
 
 ```ruby
 completion = client.chat('How fast is a cheetah?', model: OmniAI::OpenAI::Chat::Model::GPT_3_5_TURBO)
