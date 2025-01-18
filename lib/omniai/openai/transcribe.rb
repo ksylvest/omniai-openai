@@ -5,11 +5,11 @@ module OmniAI
     # An OpenAI transcribe implementation.
     class Transcribe < OmniAI::Transcribe
       module Model
-        WHISPER_1 = 'whisper-1'
+        WHISPER_1 = "whisper-1"
         WHISPER = WHISPER_1
       end
 
-      protected
+    protected
 
       # @return [Hash]
       def payload

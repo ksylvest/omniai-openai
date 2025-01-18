@@ -5,20 +5,20 @@ module OmniAI
     # An OpenAI transcribe implementation.
     class Speak < OmniAI::Speak
       module Model
-        TTS_1 = 'tts-1'
-        TTS_1_HD = 'tts-1-hd'
+        TTS_1 = "tts-1"
+        TTS_1_HD = "tts-1-hd"
       end
 
       module Voice
-        ALLOY = 'alloy' # https://platform.openai.com/docs/guides/text-to-speech/alloy
-        ECHO = 'echo' # https://platform.openai.com/docs/guides/text-to-speech/echo
-        FABLE = 'fable' # https://platform.openai.com/docs/guides/text-to-speech/fable
-        NOVA = 'nova' # https://platform.openai.com/docs/guides/text-to-speech/nova
-        ONYX = 'onyx' # https://platform.openai.com/docs/guides/text-to-speech/onyx
-        SHIMMER = 'shimmer' # https://platform.openai.com/docs/guides/text-to-speech/shimmer
+        ALLOY = "alloy" # https://platform.openai.com/docs/guides/text-to-speech/alloy
+        ECHO = "echo" # https://platform.openai.com/docs/guides/text-to-speech/echo
+        FABLE = "fable" # https://platform.openai.com/docs/guides/text-to-speech/fable
+        NOVA = "nova" # https://platform.openai.com/docs/guides/text-to-speech/nova
+        ONYX = "onyx" # https://platform.openai.com/docs/guides/text-to-speech/onyx
+        SHIMMER = "shimmer" # https://platform.openai.com/docs/guides/text-to-speech/shimmer
       end
 
-      protected
+    protected
 
       # @return [Hash]
       def payload

@@ -6,10 +6,10 @@ module OmniAI
       # An OpenAI run within a thread.
       class Run
         module Status
-          CANCELLED = 'cancelled'
-          FAILED = 'failed'
-          COMPLETED = 'completed'
-          EXPIRED = 'expired'
+          CANCELLED = "cancelled"
+          FAILED = "failed"
+          COMPLETED = "completed"
+          EXPIRED = "expired"
         end
 
         TERMINATED_STATUSES = [
@@ -125,7 +125,7 @@ module OmniAI
 
           raise HTTPError, response.flush unless response.status.ok?
 
-          response.parse['data'].map { |data| parse(data:, client:) }
+          response.parse["data"].map { |data| parse(data:, client:) }
         end
 
         # @param thread_id [String] required
@@ -160,7 +160,7 @@ module OmniAI
         # @raise [HTTPError]
         # @return [OmniAI::OpenAI::Thread]
         def reload!
-          raise Error, 'unable to fetch! without an ID' unless @id
+          raise Error, "unable to fetch! without an ID" unless @id
 
           response = @client.connection
             .accept(:json)
@@ -176,10 +176,10 @@ module OmniAI
         # @raise [OmniAI::Error]
         # @return [OmniAI::OpenAI::Thread]
         def cancel!
-          raise OmniAI::Error, 'cannot cancel a non-persisted thread' unless @id
+          raise OmniAI::Error, "cannot cancel a non-persisted thread" unless @id
 
           data = self.class.cancel!(thread_id: @thread_id, id: @id, client: @client)
-          @status = data['status']
+          @status = data["status"]
           self
         end
 
@@ -200,10 +200,10 @@ module OmniAI
           TERMINATED_STATUSES.include?(@status)
         end
 
-        private
+      private
 
         class << self
-          private
+        private
 
           # @param data [Hash] required
           # @param client [OmniAI::OpenAI::Client] required
@@ -211,31 +211,31 @@ module OmniAI
           def parse(data:, client: Client.new)
             new(
               client:,
-              id: data['id'],
-              assistant_id: data['assistant_id'],
-              thread_id: data['thread_id'],
-              status: data['status'],
-              model: data['model'],
-              temperature: data['temperature'],
-              instructions: data['instructions'],
-              tools: data['tools'],
-              metadata: data['metadata']
+              id: data["id"],
+              assistant_id: data["assistant_id"],
+              thread_id: data["thread_id"],
+              status: data["status"],
+              model: data["model"],
+              temperature: data["temperature"],
+              instructions: data["instructions"],
+              tools: data["tools"],
+              metadata: data["metadata"]
             )
           end
         end
 
         # @param data [Hash] required
         def parse(data:)
-          @id = data['id']
-          @assistant_id = data['assistant_id']
-          @thread_id = data['thread_id']
-          @run_id = data['run_id']
-          @status = data['status']
-          @model = data['model']
-          @temperature = data['temperature']
-          @instructions = data['instructions']
-          @tools = data['tools']
-          @metadata = data['metadata']
+          @id = data["id"]
+          @assistant_id = data["assistant_id"]
+          @thread_id = data["thread_id"]
+          @run_id = data["run_id"]
+          @status = data["status"]
+          @model = data["model"]
+          @temperature = data["temperature"]
+          @instructions = data["instructions"]
+          @tools = data["tools"]
+          @metadata = data["metadata"]
         end
 
         # @return [Hash]

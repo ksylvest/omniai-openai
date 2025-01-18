@@ -11,12 +11,12 @@ commands:
           rm ./cc
 
 orbs:
-  ruby: circleci/ruby@2.1.3
+  ruby: circleci/ruby@2.3.1
 
 executors:
   default:
     docker:
-      - image: cimg/ruby:3.3.5
+      - image: cimg/ruby:3.4.1
 
 jobs:
   doc:

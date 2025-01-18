@@ -110,7 +110,7 @@ module OmniAI
 
           raise HTTPError, response.flush unless response.status.ok?
 
-          response.parse['data'].map { |data| parse(data:, client:) }
+          response.parse["data"].map { |data| parse(data:, client:) }
         end
 
         # @param thread_id [String] required
@@ -145,17 +145,17 @@ module OmniAI
         # @raise [OmniAI::Error]
         # @return [OmniAI::OpenAI::Thread]
         def destroy!
-          raise OmniAI::Error, 'cannot destroy a non-persisted thread' unless @id
+          raise OmniAI::Error, "cannot destroy a non-persisted thread" unless @id
 
           data = self.class.destroy!(thread_id: @thread_id, id: @id, client: @client)
-          @deleted = data['deleted']
+          @deleted = data["deleted"]
           self
         end
 
-        private
+      private
 
         class << self
-          private
+        private
 
           # @param data [Hash] required
           # @param client [OmniAI::OpenAI::Client] required
@@ -163,28 +163,28 @@ module OmniAI
           def parse(data:, client: Client.new)
             new(
               client:,
-              id: data['id'],
-              assistant_id: data['assistant_id'],
-              thread_id: data['thread_id'],
-              run_id: data['run_id'],
-              role: data['role'],
-              content: Content.for(data: data['content'], client:),
-              attachments: Attachment.for(data: data['attachments'], client:),
-              metadata: data['metadata']
+              id: data["id"],
+              assistant_id: data["assistant_id"],
+              thread_id: data["thread_id"],
+              run_id: data["run_id"],
+              role: data["role"],
+              content: Content.for(data: data["content"], client:),
+              attachments: Attachment.for(data: data["attachments"], client:),
+              metadata: data["metadata"]
             )
           end
         end
 
         # @param data [Hash] required
         def parse(data:)
-          @id = data['id']
-          @assistant_id = data['assistant_id']
-          @thread_id =  data['thread_id']
-          @run_id =  data['run_id']
-          @role = data['role']
-          @content = Content.for(data: data['content'], client: @client)
-          @attachments = Attachment.for(data: data['content'], client: @client)
-          @metadata =  data['metadata']
+          @id = data["id"]
+          @assistant_id = data["assistant_id"]
+          @thread_id =  data["thread_id"]
+          @run_id =  data["run_id"]
+          @role = data["role"]
+          @content = Content.for(data: data["content"], client: @client)
+          @attachments = Attachment.for(data: data["content"], client: @client)
+          @metadata =  data["metadata"]
         end
 
         # @return [Hash]

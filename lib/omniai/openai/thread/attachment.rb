@@ -28,12 +28,12 @@ module OmniAI
 
         # @return [String] e.g. "text"
         def file_id
-          @file_id ||= @data['file_id']
+          @file_id ||= @data["file_id"]
         end
 
         # @return [Array<Hash>]
         def tools
-          @tools ||= @data['tools']
+          @tools ||= @data["tools"]
         end
 
         # @return [OmniAI::OpenAI::File]

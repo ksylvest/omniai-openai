@@ -4,7 +4,7 @@ module OmniAI
   module OpenAI
     # An OpenAI assistants implementation.
     class Assistant
-      HEADERS = { 'OpenAI-Beta': 'assistants=v2' }.freeze
+      HEADERS = { "OpenAI-Beta": "assistants=v2" }.freeze
 
       # @!attribute [rw] id
       #   @return [String, nil]
@@ -95,7 +95,7 @@ module OmniAI
 
         raise HTTPError, response.flush unless response.status.ok?
 
-        response.parse['data'].map { |data| parse(data:, client:) }
+        response.parse["data"].map { |data| parse(data:, client:) }
       end
 
       # @param id [String] required
@@ -128,17 +128,17 @@ module OmniAI
       # @raise [OmniAI::Error]
       # @return [OmniAI::OpenAI::Assistant]
       def destroy!
-        raise OmniAI::Error, 'cannot destroy a non-persisted assistant' unless @id
+        raise OmniAI::Error, "cannot destroy a non-persisted assistant" unless @id
 
         data = self.class.destroy!(id: @id, client: @client)
-        @deleted = data['deleted']
+        @deleted = data["deleted"]
         self
       end
 
-      private
+    private
 
       class << self
-        private
+      private
 
         # @param data [Hash] required
         # @param client [OmniAI::OpenAI::Client] required
@@ -146,13 +146,13 @@ module OmniAI
         def parse(data:, client: Client.new)
           new(
             client:,
-            id: data['id'],
-            name: data['name'],
-            model: data['model'],
-            description: data['description'],
-            instructions: data['instructions'],
-            metadata: data['metadata'],
-            tools: data['tools']
+            id: data["id"],
+            name: data["name"],
+            model: data["model"],
+            description: data["description"],
+            instructions: data["instructions"],
+            metadata: data["metadata"],
+            tools: data["tools"]
           )
         end
       end
@@ -160,13 +160,13 @@ module OmniAI
       # @param data [Hash] required
       # @return [OmniAI::OpenAI::Assistant]
       def parse(data:)
-        @id = data['id']
-        @name = data['name']
-        @model = data['model']
-        @description = data['description']
-        @instructions = data['instructions']
-        @metadata = data['metadata']
-        @tools = data['tools']
+        @id = data["id"]
+        @name = data["name"]
+        @model = data["model"]
+        @description = data["description"]
+        @instructions = data["instructions"]
+        @metadata = data["metadata"]
+        @tools = data["tools"]
       end
 
       # @return [Hash]

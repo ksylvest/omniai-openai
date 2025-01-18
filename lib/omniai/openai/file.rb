@@ -25,7 +25,7 @@ module OmniAI
       attr_accessor :deleted
 
       module Purpose
-        ASSISTANTS = 'assistants'
+        ASSISTANTS = "assistants"
       end
 
       # @param client [OmniAI::OpenAI::Client] optional
@@ -58,7 +58,7 @@ module OmniAI
       # @raise [OmniAI::Error]
       # @yield [String]
       def content(&)
-        raise OmniAI::Error, 'cannot fetch content without ID' unless @id
+        raise OmniAI::Error, "cannot fetch content without ID" unless @id
 
         response = @client.connection
           .get("/#{OmniAI::OpenAI::Client::VERSION}/files/#{@id}/content")
@@ -90,7 +90,7 @@ module OmniAI
 
         raise HTTPError, response.flush unless response.status.ok?
 
-        response.parse['data'].map { |data| parse(data:, client:) }
+        response.parse["data"].map { |data| parse(data:, client:) }
       end
 
       # @param id [String] required
@@ -109,7 +109,7 @@ module OmniAI
       # @raise [HTTPError]
       # @return [OmniAI::OpenAI::Assistant]
       def save!
-        raise OmniAI::Error, 'cannot save a file without IO' unless @io
+        raise OmniAI::Error, "cannot save a file without IO" unless @io
 
         response = @client.connection
           .accept(:json)
@@ -123,14 +123,14 @@ module OmniAI
       # @raise [OmniAI::Error]
       # @return [OmniAI::OpenAI::Assistant]
       def destroy!
-        raise OmniAI::Error, 'cannot destroy w/o ID' unless @id
+        raise OmniAI::Error, "cannot destroy w/o ID" unless @id
 
         data = self.class.destroy!(id: @id, client: @client)
-        @deleted = data['deleted']
+        @deleted = data["deleted"]
         self
       end
 
-      private
+    private
 
       # @return [Hash]
       def payload
@@ -141,7 +141,7 @@ module OmniAI
       end
 
       class << self
-        private
+      private
 
         # @param data [Hash] required
         # @param client [OmniAI::OpenAI::Client] required
@@ -149,10 +149,10 @@ module OmniAI
         def parse(data:, client: Client.new)
           new(
             client:,
-            id: data['id'],
-            bytes: data['bytes'],
-            filename: data['filename'],
-            purpose: data['purpose']
+            id: data["id"],
+            bytes: data["bytes"],
+            filename: data["filename"],
+            purpose: data["purpose"]
           )
         end
       end
@@ -160,10 +160,10 @@ module OmniAI
       # @param data [Hash] required
       # @return [OmniAI::OpenAI::Assistant]
       def parse(data:)
-        @id = data['id']
-        @bytes = data['bytes']
-        @filename = data['filename']
-        @purpose = data['purpose']
+        @id = data["id"]
+        @bytes = data["bytes"]
+        @filename = data["filename"]
+        @purpose = data["purpose"]
       end
     end
   end

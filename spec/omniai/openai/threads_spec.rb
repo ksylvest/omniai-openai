@@ -5,29 +5,29 @@ RSpec.describe OmniAI::OpenAI::Threads do
 
   let(:client) { OmniAI::OpenAI::Client.new }
 
-  describe '#build' do
+  describe "#build" do
     subject(:build) { threads.build }
 
     it { expect(build).to be_a(OmniAI::OpenAI::Thread) }
   end
 
-  describe '#find' do
-    subject(:find) { threads.find(id: 'thread-123') }
+  describe "#find" do
+    subject(:find) { threads.find(id: "thread-123") }
 
-    it 'proxies' do
+    it "proxies" do
       allow(OmniAI::OpenAI::Thread).to receive(:find)
       find
-      expect(OmniAI::OpenAI::Thread).to have_received(:find).with(id: 'thread-123', client:)
+      expect(OmniAI::OpenAI::Thread).to have_received(:find).with(id: "thread-123", client:)
     end
   end
 
-  describe '#destroy!' do
-    subject(:destroy!) { threads.destroy!(id: 'thread-123') }
+  describe "#destroy!" do
+    subject(:destroy!) { threads.destroy!(id: "thread-123") }
 
-    it 'proxies' do
+    it "proxies" do
       allow(OmniAI::OpenAI::Thread).to receive(:destroy!)
       destroy!
-      expect(OmniAI::OpenAI::Thread).to have_received(:destroy!).with(id: 'thread-123', client:)
+      expect(OmniAI::OpenAI::Thread).to have_received(:destroy!).with(id: "thread-123", client:)
     end
   end
 end

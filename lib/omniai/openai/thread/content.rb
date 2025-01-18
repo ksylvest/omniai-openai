@@ -6,7 +6,7 @@ module OmniAI
       # An OpenAI content w/ annotations.
       class Content
         module Type
-          TEXT = 'text'
+          TEXT = "text"
         end
 
         # @param data [Array]
@@ -31,7 +31,7 @@ module OmniAI
 
         # @return [String] e.g. "text"
         def type
-          @type ||= @data['type']
+          @type ||= @data["type"]
         end
 
         # @return [Boolean]
@@ -41,7 +41,7 @@ module OmniAI
 
         # @return [OmniAI::OpenAI::Thread::Text]
         def text
-          @text ||= Text.new(data: @data['text'], client: @client) if @data['text']
+          @text ||= Text.new(data: @data["text"], client: @client) if @data["text"]
         end
       end
     end

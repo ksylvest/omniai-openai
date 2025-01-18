@@ -12,22 +12,22 @@ module OmniAI
     #   end
     #   completion.choice.message.content # '...'
     class Chat < OmniAI::Chat
-      JSON_RESPONSE_FORMAT = { type: 'json_object' }.freeze
+      JSON_RESPONSE_FORMAT = { type: "json_object" }.freeze
 
       module Model
-        GPT_4O = 'gpt-4o'
-        GPT_4O_MINI = 'gpt-4o-mini'
-        GPT_4 = 'gpt-4'
-        GPT_4_TURBO = 'gpt-4-turbo'
-        GPT_3_5_TURBO = 'gpt-3.5-turbo'
-        O1_MINI = 'o1-mini'
-        O1_PREVIEW = 'o1-preview'
+        GPT_4O = "gpt-4o"
+        GPT_4O_MINI = "gpt-4o-mini"
+        GPT_4 = "gpt-4"
+        GPT_4_TURBO = "gpt-4-turbo"
+        GPT_3_5_TURBO = "gpt-3.5-turbo"
+        O1_MINI = "o1-mini"
+        O1_PREVIEW = "o1-preview"
         O1 = O1_PREVIEW
       end
 
       DEFAULT_MODEL = Model::GPT_4O
 
-      protected
+    protected
 
       # @return [Hash]
       def payload

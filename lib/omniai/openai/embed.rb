@@ -11,14 +11,14 @@ module OmniAI
     #   response.embedding [0.0, ...]
     class Embed < OmniAI::Embed
       module Model
-        SMALL = 'text-embedding-3-small'
-        LARGE = 'text-embedding-3-large'
-        ADA = 'text-embedding-ada-002'
+        SMALL = "text-embedding-3-small"
+        LARGE = "text-embedding-3-large"
+        ADA = "text-embedding-ada-002"
       end
 
       DEFAULT_MODEL = Model::LARGE
 
-      protected
+    protected
 
       # @return [Hash]
       def payload

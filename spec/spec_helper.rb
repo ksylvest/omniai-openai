@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-require 'webmock/rspec'
+require "simplecov"
+require "webmock/rspec"
 
 SimpleCov.start do
   enable_coverage :branch
 end
 
-require 'omniai/openai'
+require "omniai/openai"
 
 OmniAI::OpenAI.configure do |config|
-  config.api_key = '...'
+  config.api_key = "..."
 end
 
 RSpec.configure do |config|
