@@ -30,17 +30,17 @@ module OmniAI
 
         # @return [String] e.g. "text"
         def type
-          @data['type']
+          @data["type"]
         end
 
         # @return [String]
         def value
-          @data['value']
+          @data["value"]
         end
 
         # @return [Array<OmniAI::OpenAI::Thread::Annotation>]
         def annotations
-          @annotations ||= @data['annotations'].map { |data| Annotation.new(data:, client: @client) }
+          @annotations ||= @data["annotations"].map { |data| Annotation.new(data:, client: @client) }
         end
       end
     end

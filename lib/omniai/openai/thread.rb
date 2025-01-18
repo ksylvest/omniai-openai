@@ -4,7 +4,7 @@ module OmniAI
   module OpenAI
     # An OpenAI threads implementation.
     class Thread
-      HEADERS = { 'OpenAI-Beta': 'assistants=v2' }.freeze
+      HEADERS = { "OpenAI-Beta": "assistants=v2" }.freeze
 
       # @!attribute [rw] id
       #   @return [String, nil]
@@ -86,10 +86,10 @@ module OmniAI
       # @raise [OmniAI::Error]
       # @return [OmniAI::OpenAI::Thread]
       def destroy!
-        raise OmniAI::Error, 'cannot destroy a non-persisted thread' unless @id
+        raise OmniAI::Error, "cannot destroy a non-persisted thread" unless @id
 
         data = self.class.destroy!(id: @id, client: @client)
-        @deleted = data['deleted']
+        @deleted = data["deleted"]
         self
       end
 
@@ -103,10 +103,10 @@ module OmniAI
         Runs.new(client: @client, thread: self)
       end
 
-      private
+    private
 
       class << self
-        private
+      private
 
         # @param data [Hash] required
         # @param client [OmniAI::OpenAI::Client] required
@@ -114,9 +114,9 @@ module OmniAI
         def parse(data:, client: Client.new)
           new(
             client:,
-            id: data['id'],
-            metadata: data['metadata'],
-            tool_resources: data['tool_resources']
+            id: data["id"],
+            metadata: data["metadata"],
+            tool_resources: data["tool_resources"]
           )
         end
       end
@@ -124,9 +124,9 @@ module OmniAI
       # @param data [Hash] required
       # @return [OmniAI::OpenAI::Thread]
       def parse(data:)
-        @id = data['id']
-        @metadata = data['metadata']
-        @tool_resources = data['tool_resources']
+        @id = data["id"]
+        @metadata = data["metadata"]
+        @tool_resources = data["tool_resources"]
       end
 
       # @return [Hash]

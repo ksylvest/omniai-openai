@@ -4,7 +4,7 @@ module OmniAI
   module OpenAI
     # Configuration for OpenAI.
     class Config < OmniAI::Config
-      DEFAULT_HOST = 'https://api.openai.com'
+      DEFAULT_HOST = "https://api.openai.com"
 
       # @!attribute [rw] organization
       #   @return [String, nil] passed as `OpenAI-Organization` if specified
@@ -21,10 +21,10 @@ module OmniAI
       # @param logger [Logger, nil] optional
       # @param timeout [Integer, Hash, nil] optional
       def initialize(
-        api_key: ENV.fetch('OPENAI_API_KEY', nil),
-        host: ENV.fetch('OPENAI_HOST', DEFAULT_HOST),
-        organization: ENV.fetch('OPENAI_ORGANIZATION', nil),
-        project: ENV.fetch('OPENAI_PROJECT', nil),
+        api_key: ENV.fetch("OPENAI_API_KEY", nil),
+        host: ENV.fetch("OPENAI_HOST", DEFAULT_HOST),
+        organization: ENV.fetch("OPENAI_ORGANIZATION", nil),
+        project: ENV.fetch("OPENAI_PROJECT", nil),
         logger: nil,
         timeout: nil
       )

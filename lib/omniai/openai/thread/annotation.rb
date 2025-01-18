@@ -18,22 +18,22 @@ module OmniAI
 
         # @return [String] "file_citation" or "file_path"
         def type
-          @data['type']
+          @data["type"]
         end
 
         # @return [String]
         def text
-          @data['text']
+          @data["text"]
         end
 
         # @return [Integer]
         def start_index
-          @data['start_index']
+          @data["start_index"]
         end
 
         # @return [Integer]
         def end_index
-          @data['end_index']
+          @data["end_index"]
         end
 
         # @return [Range<Integer>]
@@ -43,7 +43,7 @@ module OmniAI
 
         # @return [String]
         def file_id
-          @file_id ||= (@data['file_citation'] || @data['file_path'])['file_id']
+          @file_id ||= (@data["file_citation"] || @data["file_path"])["file_id"]
         end
 
         # Present if type is "file_citation" or "file_path".

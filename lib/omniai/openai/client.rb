@@ -20,7 +20,7 @@ module OmniAI
     #
     #   client = OmniAI::OpenAI::Client.new
     class Client < OmniAI::Client
-      VERSION = 'v1'
+      VERSION = "v1"
 
       attr_reader :api_prefix
 
@@ -33,7 +33,7 @@ module OmniAI
       # @param timeout [Integer, nil] optional - defaults to `OmniAI::OpenAI.config.timeout`
       def initialize(
         api_key: OmniAI::OpenAI.config.api_key,
-        api_prefix: '',
+        api_prefix: "",
         host: OmniAI::OpenAI.config.host,
         organization: OmniAI::OpenAI.config.organization,
         project: OmniAI::OpenAI.config.project,
@@ -53,9 +53,9 @@ module OmniAI
         @project = project
 
         @api_prefix = api_prefix
-        return if @api_prefix.empty? || @api_prefix.start_with?('/')
+        return if @api_prefix.empty? || @api_prefix.start_with?("/")
 
-        @api_prefix.prepend('/')
+        @api_prefix.prepend("/")
       end
 
       # @return [HTTP::Client]
@@ -63,8 +63,8 @@ module OmniAI
         @connection ||= begin
           http = super
           http = http.auth("Bearer #{@api_key}") if @api_key
-          http = http.headers('OpenAI-Organization': @organization) if @organization
-          http = http.headers('OpenAI-Project': @project) if @project
+          http = http.headers("OpenAI-Organization": @organization) if @organization
+          http = http.headers("OpenAI-Project": @project) if @project
           http
         end
       end

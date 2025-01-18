@@ -1,9 +1,9 @@
+inherit_gem:
+  rubocop-basic: rubocop.yml
+
 require:
   - rubocop-rake
   - rubocop-rspec
-
-AllCops:
-  NewCops: enable
 
 RSpec/NestedGroups:
   Enabled: false
@@ -13,15 +13,6 @@ RSpec/SpecFilePathFormat:
     OmniAI: omniai
     OpenAI: openai
 
-Layout/FirstHashElementIndentation:
-  EnforcedStyle: consistent
-
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
 Metrics/ClassLength:
   Enabled: false
 
@@ -30,9 +21,3 @@ Metrics/MethodLength:
 
 Metrics/ParameterLists:
   Enabled: false
-
-Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: consistent_comma
-
-Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: consistent_comma

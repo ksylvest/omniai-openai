@@ -3,14 +3,14 @@
 RSpec.describe OmniAI::OpenAI::Embed do
   let(:client) { OmniAI::OpenAI::Client.new }
 
-  describe '.process!' do
+  describe ".process!" do
     subject(:process!) { described_class.process!(input, client:, model:) }
 
-    let(:input) { 'The quick brown fox jumps over a lazy dog.' }
+    let(:input) { "The quick brown fox jumps over a lazy dog." }
     let(:model) { described_class::DEFAULT_MODEL }
 
     before do
-      stub_request(:post, 'https://api.openai.com/v1/embeddings')
+      stub_request(:post, "https://api.openai.com/v1/embeddings")
         .with(body: {
           input: [input],
           model:,

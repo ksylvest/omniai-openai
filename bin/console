@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'omniai/openai'
+require "bundler/setup"
+require "omniai/openai"
 
-require 'logger'
+require "logger"
 
 CLIENT = OmniAI::OpenAI::Client.new(logger: Logger.new($stdout))
 
-require 'irb'
+require "irb"
 IRB.start(__FILE__)
