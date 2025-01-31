@@ -50,9 +50,11 @@ GEM
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    omniai (1.9.3)
+    logger (1.6.5)
+    omniai (1.9.5)
       event_stream_parser
       http
+      logger
       zeitwerk
     parallel (1.26.3)
     parser (3.3.7.0)
