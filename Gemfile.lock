@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    omniai-openai (1.9.3)
+    omniai-openai (1.9.4)
       event_stream_parser
-      omniai
+      omniai (~> 1.9)
       zeitwerk
 
 GEM
