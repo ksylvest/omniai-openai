@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    omniai-openai (1.9.4)
+    omniai-openai (2.0.0)
       event_stream_parser
-      omniai (~> 1.9)
+      omniai (~> 2.0)
       zeitwerk
 
 GEM
@@ -52,7 +52,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.6.5)
-    omniai (1.9.5)
+    omniai (2.0.0)
       event_stream_parser
       http
       logger
