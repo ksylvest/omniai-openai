@@ -11,9 +11,12 @@ module OmniAI
     #   response.embedding [0.0, ...]
     class Embed < OmniAI::Embed
       module Model
-        SMALL = "text-embedding-3-small"
-        LARGE = "text-embedding-3-large"
-        ADA = "text-embedding-ada-002"
+        TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small"
+        TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large"
+        TEXT_EMBEDDING_ADA_002 = "text-embedding-ada-002"
+        SMALL = TEXT_EMBEDDING_3_SMALL
+        LARGE = TEXT_EMBEDDING_3_LARGE
+        ADA = TEXT_EMBEDDING_ADA_002
       end
 
       DEFAULT_MODEL = Model::LARGE
