@@ -33,6 +33,17 @@ module OmniAI
         #   @return [Integer, nil]
         attr_reader :page
 
+        # Factory method: validates parameters and builds the object.
+        #
+        # @param args [Hash] keyword arguments
+        # @return [Cost]
+        # @raise [ArgumentError] if validation fails
+        def self.build!(**args)
+          validate_array_params!(args)
+
+          new(**args)
+        end
+
         # @param start_time [Time]
         # @param end_time [Time, nil] optional
         # @param bucket_width [String, nil] optional
@@ -57,13 +68,11 @@ module OmniAI
           @limit = limit
           @page = page
           @client = OmniAI::OpenAI::Client.new(api_key: OmniAI::OpenAI.config.admin_api_key)
-
-          validate_array_params!
         end
 
         # @param response [HTTP::Response]
         def self.get(**args)
-          new(**args).get
+          build!(**args).get
         end
 
         # @param response [HTTP::Response]
@@ -92,15 +101,18 @@ module OmniAI
           }.compact
         end
 
-        # @raise [ArgumentError]
-        # @return [void]
-        def validate_array_params!
-          raise ArgumentError, "project_ids must be an Array" if project_ids && !project_ids.is_a?(Array)
-
-          return unless group_by && !group_by.is_a?(Array)
-
-          raise ArgumentError, "group_by must be an Array"
+        # Validates that if present, project_ids and group_by are Arrays.
+        #
+        # @param args [Hash]
+        # @raise [ArgumentError] if a parameter is not an Array
+        def self.validate_array_params!(args)
+          { project_ids: "project_ids", group_by: "group_by" }.each do |key, name|
+            value = args[key]
+            raise ArgumentError, "#{name} must be an Array" if value && !value.is_a?(Array)
+          end
         end
+
+        private_class_method :validate_array_params!
       end
     end
   end
