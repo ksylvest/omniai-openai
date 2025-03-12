@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    omniai-openai (1.9.3)
+    omniai-openai (2.0.1)
       event_stream_parser
-      omniai
+      omniai (~> 2.0)
       zeitwerk
 
 GEM
@@ -52,7 +52,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.6.5)
-    omniai (1.9.5)
+    omniai (2.0.0)
       event_stream_parser
       http
       logger
@@ -66,7 +66,7 @@ GEM
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.10.0)
-    rexml (3.4.0)
+    rexml (3.4.1)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -82,7 +82,7 @@ GEM
     rspec-support (3.13.2)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.73.0)
+    rubocop (1.73.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -112,7 +112,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    webmock (3.25.0)
+    webmock (3.25.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
