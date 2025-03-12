@@ -39,6 +39,7 @@ Global configuration is supported for the following options:
 ```ruby
 OmniAI::OpenAI.configure do |config|
   config.api_key = 'sk-...' # default: ENV['OPENAI_API_KEY']
+  config.admin_api_key = 'sk-admin...' # default: ENV['OPENAI_ADMIN_API_KEY']
   config.organization = '...' # default: ENV['OPENAI_ORGANIZATION']
   config.project = '...' # default: ENV['OPENAI_PROJECT']
   config.host = '...' # default: 'https://api.openai.com' - override for usage with LocalAI / Ollama
@@ -468,3 +469,26 @@ Text can be converted into a vector embedding for similarity comparison usage vi
 response = client.embed('The quick brown fox jumps over a lazy dog.')
 response.embedding # [0.0, ...]
 ```
+
+## OpenAI Usage
+### Costs
+
+Get costs details for the organization.
+
+```ruby
+start_time = 1739112382 # just start_time is required
+end_time = 1741704400
+group_by = ["project_id"]
+project_ids = ["proj_..."]
+limit = 30
+
+OmniAI::OpenAI::Usage::Cost.get(
+  start_time:, 
+  end_time:,
+  group_by:,
+  project_ids:, 
+  limit:
+) # { "object": "page", "has_more": false, "next_page": null, "data": [...] }
+```
+
+For more details, check it out [here](https://platform.openai.com/docs/api-reference/usage/costs)
