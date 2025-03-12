@@ -12,7 +12,7 @@ RSpec.describe OmniAI::OpenAI::Usage::Cost do
       start_time: 1_739_112_382,
       end_time: 1_741_704_400,
       bucket_width: nil,
-      project_ids: ["proj_6fLLCZmchmiqHfzSKWYVMUtr"],
+      project_ids: ["proj_1234"],
       group_by: ["project_id"],
       limit: 100,
       page: nil,
@@ -25,10 +25,26 @@ RSpec.describe OmniAI::OpenAI::Usage::Cost do
     context "with an OK response" do
       let(:response_body) do
         {
-          "total_cost" => 123.45,
-          "currency" => "USD",
-          "breakdown" => [
-            { "project_id" => "proj_6fLLCZmchmiqHfzSKWYVMUtr", "cost" => 123.45 },
+          "object" => "page",
+          "has_more" => false,
+          "next_page" => nil,
+          "data" => [
+            {
+              "object" => "bucket",
+              "start_time" => 1_739_112_382,
+              "end_time" => 1_741_704_400,
+              "results" => [
+                {
+                  "object" => "organization.costs.result",
+                  "amount" => {
+                    "value" => 0.06,
+                    "currency" => "usd",
+                  },
+                  "line_item" => nil,
+                  "project_id" => "proj_1234",
+                },
+              ],
+            },
           ],
         }
       end
@@ -82,6 +98,65 @@ RSpec.describe OmniAI::OpenAI::Usage::Cost do
 
       it "raises a NoMethodError" do
         expect { cost_response }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "with an unhandled error" do
+      context "when the admin API key is missing" do
+        before do
+          stub_request(:get, %r{https://api\.openai\.com/v1/organization/costs\?})
+            .to_return(
+              body: {
+                "error" => {
+                  "message" => error_message,
+                  "type" => "invalid_request_error",
+                  "param" => nil,
+                  "code" => nil,
+                },
+              }.to_json,
+              status: 401,
+              headers: { "Content-Type" => "application/json" }
+            )
+        end
+
+        let(:error_message) do
+          "You didn't provide an API key. You need to provide your API key " \
+            "in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY). " \
+            "You can obtain an API key from https://platform.openai.com/account/api-keys."
+        end
+
+        it "raises an error" do
+          expect { described_class.get(**params) }
+            .to raise_error(OmniAI::HTTPError, a_string_including(error_message))
+        end
+      end
+
+      context "when the admin API key is invalid" do
+        before do
+          stub_request(:get, %r{https://api\.openai\.com/v1/organization/costs\?})
+            .to_return(
+              body: {
+                "error" => {
+                  "message" => error_message,
+                  "type" => "invalid_request_error",
+                  "param" => nil,
+                  "code" => "invalid_api_key",
+                },
+              }.to_json,
+              status: 401,
+              headers: { "Content-Type" => "application/json" }
+            )
+        end
+
+        let(:error_message) do
+          "Incorrect API key provided: sk-invalid***. You can find your API key " \
+            "at https://platform.openai.com/account/api-keys."
+        end
+
+        it "raises an error with the correct details" do
+          expect { described_class.get(**params) }
+            .to raise_error(OmniAI::HTTPError, a_string_including(error_message, "invalid_api_key"))
+        end
       end
     end
   end
