@@ -70,7 +70,7 @@ module OmniAI
         def get
           response = @client.connection
             .accept(:json)
-            .get("/#{OmniAI::OpenAI::Client::VERSION}/organization/costs?#{request_params}")
+            .get("/#{OmniAI::OpenAI::Client::VERSION}/organization/costs", params: request_params)
 
           raise HTTPError, response.flush unless response.status.ok?
 
@@ -81,7 +81,7 @@ module OmniAI
 
         # @return [String]
         def request_params
-          params = {
+          {
             start_time:,
             end_time:,
             bucket_width:,
@@ -90,8 +90,6 @@ module OmniAI
             limit:,
             page:,
           }.compact
-
-          URI.encode_www_form(params)
         end
 
         # @raise [ArgumentError]
