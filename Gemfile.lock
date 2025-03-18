@@ -48,11 +48,11 @@ GEM
     json (2.10.2)
     language_server-protocol (3.17.0.4)
     lint_roller (1.1.0)
-    llhttp-ffi (0.5.0)
+    llhttp-ffi (0.5.1)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    logger (1.6.5)
-    omniai (2.0.0)
+    logger (1.6.6)
+    omniai (2.1.0)
       event_stream_parser
       http
       logger
