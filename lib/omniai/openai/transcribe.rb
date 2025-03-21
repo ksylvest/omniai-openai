@@ -6,8 +6,12 @@ module OmniAI
     class Transcribe < OmniAI::Transcribe
       module Model
         WHISPER_1 = "whisper-1"
+        GPT_4O_TRANSCRIBE = "gpt-4o-transcribe"
+        GPT_4O_MINI_TRANSCRIBE = "gpt-4-0-mini-transcribe"
         WHISPER = WHISPER_1
       end
+
+      DEFAULT_MODEL = Model::WHISPER
 
     protected
 
