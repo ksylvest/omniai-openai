@@ -125,7 +125,7 @@ module OmniAI
       # @yield [output] optional
       #
       # @return [Tempfile``]
-      def speak(input, model: Speak::Model::TTS_1_HD, voice: Speak::Voice::ALLOY, speed: nil, format: nil, &)
+      def speak(input, model: Speak::DEFAULT_MODEL, voice: Speak::DEFAULT_VOICE, speed: nil, format: nil, &)
         Speak.process!(input, model:, voice:, speed:, format:, client: self, &)
       end
 
