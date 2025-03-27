@@ -137,7 +137,8 @@ RSpec.describe OmniAI::OpenAI::Chat do
               { role: "user", content: [{ type: "text", text: "Tell me a story." }] },
             ],
             model:,
-            stream: !stream.nil?,
+            stream: true,
+            stream_options: { include_usage: true },
           })
           .to_return(body: <<~STREAM)
             data: #{JSON.generate({ choices: [{ index: 0, delta: { role: 'assistant', content: 'Hello' } }] })}\n
