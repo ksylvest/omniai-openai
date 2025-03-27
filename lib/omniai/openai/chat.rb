@@ -13,6 +13,7 @@ module OmniAI
     #   completion.choice.message.content # '...'
     class Chat < OmniAI::Chat
       JSON_RESPONSE_FORMAT = { type: "json_object" }.freeze
+      DEFAULT_STREAM_OPTIONS = { include_usage: ENV.fetch("OMNIAI_STREAM_USAGE", "on").eql?("on") }.freeze
 
       module Model
         GPT_4O = "gpt-4o"
@@ -35,9 +36,10 @@ module OmniAI
         OmniAI::OpenAI.config.chat_options.merge({
           messages: @prompt.serialize,
           model: @model,
-          stream: @stream.nil? ? nil : !@stream.nil?,
-          temperature: @temperature,
           response_format: (JSON_RESPONSE_FORMAT if @format.eql?(:json)),
+          stream: stream? || nil,
+          stream_options: (DEFAULT_STREAM_OPTIONS if stream?),
+          temperature: @temperature,
           tools: (@tools.map(&:serialize) if @tools&.any?),
         }).compact
       end
