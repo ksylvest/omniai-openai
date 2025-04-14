@@ -16,6 +16,9 @@ module OmniAI
       DEFAULT_STREAM_OPTIONS = { include_usage: ENV.fetch("OMNIAI_STREAM_USAGE", "on").eql?("on") }.freeze
 
       module Model
+        GPT_4_1 = "gpt-4.1"
+        GPT_4_1_NANO = "gpt-4.1-nano"
+        GPT_4_1_MINI = "gpt-4.1-mini"
         GPT_4O = "gpt-4o"
         GPT_4O_MINI = "gpt-4o-mini"
         GPT_4 = "gpt-4"
@@ -26,7 +29,7 @@ module OmniAI
         O1 = "o1"
       end
 
-      DEFAULT_MODEL = Model::GPT_4O
+      DEFAULT_MODEL = Model::GPT_4_1
 
     protected
 
