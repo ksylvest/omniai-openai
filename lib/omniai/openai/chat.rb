@@ -30,6 +30,18 @@ module OmniAI
 
     protected
 
+      # @return [Float, nil]
+      def temperature
+        return if @temperature.nil?
+
+        if [Model::O1_MINI, Model::O3_MINI, Model::O1].any? { |model| model.eql?(@model) }
+          logger&.warn("unsupported temperature=#{@temperature} for model=#{@model}")
+          return
+        end
+
+        @temperature
+      end
+
       # @return [Hash]
       def payload
         OmniAI::OpenAI.config.chat_options.merge({
@@ -38,7 +50,7 @@ module OmniAI
           response_format: (JSON_RESPONSE_FORMAT if @format.eql?(:json)),
           stream: stream? || nil,
           stream_options: (DEFAULT_STREAM_OPTIONS if stream?),
-          temperature: @temperature,
+          temperature:,
           tools: (@tools.map(&:serialize) if @tools&.any?),
         }).compact
       end
