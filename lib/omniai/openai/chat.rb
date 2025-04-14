@@ -23,7 +23,6 @@ module OmniAI
         GPT_3_5_TURBO = "gpt-3.5-turbo"
         O1_MINI = "o1-mini"
         O3_MINI = "o3-mini"
-        O1_PREVIEW = "o1-preview"
         O1 = "o1"
       end
 
