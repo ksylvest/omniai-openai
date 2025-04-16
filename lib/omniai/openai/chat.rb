@@ -26,7 +26,9 @@ module OmniAI
         GPT_3_5_TURBO = "gpt-3.5-turbo"
         O1_MINI = "o1-mini"
         O3_MINI = "o3-mini"
+        O4_MINI = "o4-mini"
         O1 = "o1"
+        O3 = "o3"
       end
 
       DEFAULT_MODEL = Model::GPT_4_1
