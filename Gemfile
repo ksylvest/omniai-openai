@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "rake"
+gem "redcarpet"
 gem "rspec"
 gem "rspec_junit_formatter"
 gem "rubocop"
