@@ -4,12 +4,12 @@
 require "bundler/setup"
 require "omniai/openai"
 
-CLIENT = OmniAI::OpenAI::Client.new
+client = OmniAI::OpenAI::Client.new
 
 puts "> [SYSTEM] Respond in both English and French."
 puts "> [USER] What is the fastest animal?"
 
-CLIENT.chat(stream: $stdout) do |prompt|
+client.chat(stream: $stdout) do |prompt|
   prompt.system "Respond in both English and French."
   prompt.user "What is the fastest animal?"
 end

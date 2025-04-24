@@ -4,25 +4,58 @@
 require "bundler/setup"
 require "omniai/openai"
 
-CLIENT = OmniAI::OpenAI::Client.new
+client = OmniAI::OpenAI::Client.new
 
-TOOL = OmniAI::Tool.new(
-  proc { |location:, unit: "celsius"| "#{rand(20..50)}° #{unit} in #{location}" },
-  name: "Weather",
-  description: "Lookup the weather in a location",
-  parameters: OmniAI::Tool::Parameters.new(
-    properties: {
-      location: OmniAI::Tool::Property.string(description: "e.g. Toronto"),
-      unit: OmniAI::Tool::Property.string(enum: %w[celcius farenheit]),
-    },
-    required: %i[location]
-  )
-)
+# @example
+#   tool = GeocodeTool.new
+#   tool.execute(location: "Toronto")
+class GeocodeTool < OmniAI::Tool
+  parameter :location, :string, description: "A location to find the weather for (e.g. 'Madrid, Spain')."
+  required %i[location]
+
+  # @param location [String]
+  #
+  # @return [Hash]
+  def execute(location:)
+    puts "[geocode] location=#{location}"
+
+    {
+      lat: rand(-90.0..90.0),
+      lng: rand(-180.0..180.0),
+    }
+  end
+end
+
+# @example
+#   tool = WeatherTool.new
+#   tool.execute(location: "Toronto", unit: "celsius")
+class WeatherTool < OmniAI::Tool
+  parameter :lat, :number, description: "The latitude of the location."
+  parameter :lng, :number, description: "The longitude of the location."
+  parameter :unit, :string, enum: %w[Celsius Fahrenheit], description: "The unit of measurement."
+  required %i[lat lng]
+
+  # @param lat [Float]
+  # @param lng [Float]
+  # @param unit [String] celsius or fahrenheit
+  #
+  # @return [String]
+  def execute(lat:, lng:, unit: "celsius")
+    puts "[weather] lat=#{lat} lng=#{lng} unit=#{unit}"
+
+    "#{rand(20..50)}° #{unit} at lat=#{lat} lng=#{lng}"
+  end
+end
 
 puts "> [SYSTEM] You are an expert in weather."
 puts "> [USER] What is the weather in 'London' in celsius and 'Madrid' in fahrenheit?"
 
-CLIENT.chat(stream: $stdout, tools: [TOOL]) do |prompt|
+tools = [
+  GeocodeTool.new,
+  WeatherTool.new,
+]
+
+client.chat(stream: $stdout, tools:) do |prompt|
   prompt.system "You are an expert in weather."
   prompt.user 'What is the weather in "London" in celsius and "Madrid" in fahrenheit?'
 end

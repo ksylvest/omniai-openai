@@ -4,9 +4,9 @@
 require "bundler/setup"
 require "omniai/openai"
 
-CLIENT = OmniAI::OpenAI::Client.new
+client = OmniAI::OpenAI::Client.new
 
 puts "> [USER] Tell me a joke"
 
-response = CLIENT.chat("Tell me a joke")
+response = client.chat("Tell me a joke")
 puts response.text
