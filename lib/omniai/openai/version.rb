@@ -2,6 +2,6 @@
 
 module OmniAI
   module OpenAI
-    VERSION = "2.2.4"
+    VERSION = "2.6.0"
   end
 end
