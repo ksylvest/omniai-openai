@@ -12,7 +12,7 @@ RSpec.describe OmniAI::OpenAI::Speak do
 
     before do
       stub_request(:post, "https://api.openai.com/v1/audio/speech")
-        .with(body: { model:, voice:, input: })
+        .with(body: { model:, voice:, input:, response_format: "aac" })
         .to_return(body: "...")
     end
 
