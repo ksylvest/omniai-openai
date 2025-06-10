@@ -36,9 +36,8 @@ GEM
       ffi (>= 1.15.5)
       rake
     hashdiff (1.1.2)
-    http (5.2.0)
+    http (5.3.1)
       addressable (~> 2.8)
-      base64 (~> 0.1)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
       llhttp-ffi (~> 0.5.0)
@@ -52,7 +51,8 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    omniai (2.8.1)
+    omniai (2.8.2)
+      base64
       event_stream_parser
       http
       logger
