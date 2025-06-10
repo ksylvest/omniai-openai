@@ -102,10 +102,12 @@ module OmniAI
       # @param prompt [String, nil] optional
       # @param temperature [Float, nil] optional
       # @param format [Symbol] :text, :srt, :vtt, or :json (default)
+      # @param verbose [Boolean] optional - request detailed response with segments/timing
       #
       # @return [OmniAI::Transcribe]
-      def transcribe(path, model: Transcribe::DEFAULT_MODEL, language: nil, prompt: nil, temperature: nil, format: nil)
-        Transcribe.process!(path, model:, language:, prompt:, temperature:, format:, client: self)
+      def transcribe(path, model: Transcribe::DEFAULT_MODEL, language: nil, prompt: nil, temperature: nil,
+        format: nil, verbose: false)
+        Transcribe.process!(path, model:, language:, prompt:, temperature:, format:, verbose:, client: self)
       end
 
       # @raise [OmniAI::Error]

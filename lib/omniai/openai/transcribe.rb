@@ -20,7 +20,6 @@ module OmniAI
         OmniAI::OpenAI
           .config.transcribe_options
           .merge(super)
-          .merge({ response_format: @format || Format::JSON })
       end
 
       # @return [String]
