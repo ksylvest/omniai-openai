@@ -51,7 +51,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    omniai (2.8.2)
+    omniai (2.8.3)
       base64
       event_stream_parser
       http
