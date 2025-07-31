@@ -1,17 +1,8 @@
 version: 2.1
 
-commands:
-  codeclimate:
-    steps:
-      - run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-$CC_TEST_REPORTER_VERSION > ./cc
-          chmod +x ./cc
-          ./cc format-coverage -t simplecov coverage/coverage.json
-          ./cc upload-coverage
-          rm ./cc
-
 orbs:
   ruby: circleci/ruby@2.3.1
+  qlty: qltysh/qlty-orb@0.0.11
 
 executors:
   default:
@@ -30,6 +21,7 @@ jobs:
       - checkout
       - ruby/install-deps
       - run: bundle exec yard doc
+
   rspec:
     parameters:
       ruby-version:
@@ -42,13 +34,16 @@ jobs:
       - checkout
       - ruby/install-deps
       - ruby/rspec-test
-      - codeclimate
+      - qlty/coverage_publish:
+          files: ./coverage/.resultset.json
+
   rubocop:
     executor: default
     steps:
       - checkout
       - ruby/install-deps
       - ruby/rubocop-check
+
   release:
     executor: default
     steps:
