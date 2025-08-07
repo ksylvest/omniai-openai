@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniai-openai (2.6.0)
+    omniai-openai (2.6.1)
       event_stream_parser
       omniai (~> 2.6)
       zeitwerk
