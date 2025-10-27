@@ -49,27 +49,11 @@ RSpec.describe OmniAI::OpenAI::Client do
     end
   end
 
-  describe "#assistants" do
-    it "proxies" do
-      allow(OmniAI::OpenAI::Assistants).to receive(:new)
-      client.assistants
-      expect(OmniAI::OpenAI::Assistants).to have_received(:new).with(client:)
-    end
-  end
-
   describe "#files" do
     it "proxies" do
       allow(OmniAI::OpenAI::Files).to receive(:new)
       client.files
       expect(OmniAI::OpenAI::Files).to have_received(:new).with(client:)
-    end
-  end
-
-  describe "#threads" do
-    it "proxies" do
-      allow(OmniAI::OpenAI::Threads).to receive(:new)
-      client.threads
-      expect(OmniAI::OpenAI::Threads).to have_received(:new).with(client:)
     end
   end
 end
