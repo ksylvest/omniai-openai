@@ -20,6 +20,19 @@ module OmniAI
         SCHEMA_TYPE = "json_schema"
       end
 
+      module ReasoningEffort
+        NONE = "none"
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+      end
+
+      module VerbosityText
+        LOW = "low"
+        MEDIUM = "medium"
+        HIGH = "high"
+      end
+
       module Model
         GPT_5_1 = "gpt-5.1"
         GPT_5 = "gpt-5"
@@ -66,7 +79,9 @@ module OmniAI
           stream_options: (DEFAULT_STREAM_OPTIONS if stream?),
           temperature:,
           tools: (@tools.map(&:serialize) if @tools&.any?),
-        }).compact
+          reasoning: reasoning_payload,
+          verbosity: verbosity_payload,
+        }.merge(@kwargs || {})).compact
       end
 
       # @return [String]
@@ -86,6 +101,42 @@ module OmniAI
         when OmniAI::Schema::Format then { type: ResponseFormat::SCHEMA_TYPE, json_schema: @format.serialize }
         else raise ArgumentError, "unknown format=#{@format}"
         end
+      end
+
+      # @raise [ArgumentError]
+      #
+      # @return [Hash, nil]
+      def reasoning_payload
+        return if @reasoning.nil?
+
+        effort = @reasoning[:effort] || @reasoning["effort"]
+        return if effort.nil?
+
+        valid_efforts = [ReasoningEffort::NONE, ReasoningEffort::LOW, ReasoningEffort::MEDIUM, ReasoningEffort::HIGH]
+        unless valid_efforts.include?(effort)
+          raise ArgumentError,
+            "reasoning effort must be one of #{valid_efforts.join(', ')}"
+        end
+
+        { effort: }
+      end
+
+      # @raise [ArgumentError]
+      #
+      # @return [Hash, nil]
+      def verbosity_payload
+        return if @verbosity.nil?
+
+        text = @verbosity[:text] || @verbosity["text"]
+        return if text.nil?
+
+        valid_text_levels = [VerbosityText::LOW, VerbosityText::MEDIUM, VerbosityText::HIGH]
+        unless valid_text_levels.include?(text)
+          raise ArgumentError,
+            "verbosity text must be one of #{valid_text_levels.join(', ')}"
+        end
+
+        { text: }
       end
     end
   end

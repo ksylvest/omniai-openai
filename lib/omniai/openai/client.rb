@@ -77,13 +77,16 @@ module OmniAI
       # @param temperature [Float, nil] optional
       # @param stream [Proc, nil] optional
       # @param tools [Array<OmniAI::Tool>, nil] optional
+      # @param reasoning [Hash, nil] optional reasoning configuration
+      # @param verbosity [Hash, nil] optional verbosity configuration
       #
       # @yield [prompt]
       # @yieldparam prompt [OmniAI::Chat::Prompt]
       #
       # @return [OmniAI::Chat::Completion]
-      def chat(messages = nil, model: Chat::DEFAULT_MODEL, temperature: nil, format: nil, stream: nil, tools: nil, &)
-        Chat.process!(messages, model:, temperature:, format:, stream:, tools:, client: self, &)
+      def chat(messages = nil, model: Chat::DEFAULT_MODEL, temperature: nil, format: nil, stream: nil, tools: nil,
+        reasoning: nil, verbosity: nil, &)
+        Chat.process!(messages, model:, temperature:, format:, stream:, tools:, reasoning:, verbosity:, client: self, &)
       end
 
       # @raise [OmniAI::Error]
