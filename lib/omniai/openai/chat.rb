@@ -61,7 +61,12 @@ module OmniAI
       def temperature
         return if @temperature.nil?
 
-        if [Model::O1_MINI, Model::O3_MINI, Model::O1].any? { |model| model.eql?(@model) }
+        unsupported_models = [
+          Model::O1_MINI, Model::O3_MINI, Model::O1,
+          Model::GPT_5_1, Model::GPT_5, Model::GPT_5_MINI, Model::GPT_5_NANO,
+        ]
+
+        if unsupported_models.any? { |model| model.eql?(@model) }
           logger&.warn("unsupported temperature=#{@temperature} for model=#{@model}")
           return
         end
