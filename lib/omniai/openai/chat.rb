@@ -79,7 +79,7 @@ module OmniAI
           stream_options: (DEFAULT_STREAM_OPTIONS if stream?),
           temperature:,
           tools: (@tools.map(&:serialize) if @tools&.any?),
-          reasoning: reasoning_payload,
+          reasoning_effort: reasoning_effort_payload,
           verbosity: verbosity_payload,
         }.merge(@kwargs || {})).compact
       end
@@ -105,8 +105,8 @@ module OmniAI
 
       # @raise [ArgumentError]
       #
-      # @return [Hash, nil]
-      def reasoning_payload
+      # @return [String, nil]
+      def reasoning_effort_payload
         return if @reasoning.nil?
 
         effort = @reasoning[:effort] || @reasoning["effort"]
@@ -118,12 +118,12 @@ module OmniAI
             "reasoning effort must be one of #{valid_efforts.join(', ')}"
         end
 
-        { effort: }
+        effort
       end
 
       # @raise [ArgumentError]
       #
-      # @return [Hash, nil]
+      # @return [String, nil]
       def verbosity_payload
         return if @verbosity.nil?
 
@@ -136,7 +136,7 @@ module OmniAI
             "verbosity text must be one of #{valid_text_levels.join(', ')}"
         end
 
-        { text: }
+        text
       end
     end
   end
