@@ -235,7 +235,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
           .with(body: {
             messages: [{ role: "user", content: [{ type: "text", text: "Write a haiku about code." }] }],
             model:,
-            reasoning: { effort: "low" },
+            reasoning_effort: "low",
           })
           .to_return_json(body: {
             choices: [{
@@ -263,7 +263,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
           .with(body: {
             messages: [{ role: "user", content: [{ type: "text", text: "Explain quantum computing." }] }],
             model:,
-            verbosity: { text: "low" },
+            verbosity: "low",
           })
           .to_return_json(body: {
             choices: [{
@@ -292,8 +292,8 @@ RSpec.describe OmniAI::OpenAI::Chat do
           .with(body: {
             messages: [{ role: "user", content: [{ type: "text", text: "Solve this problem." }] }],
             model:,
-            reasoning: { effort: "high" },
-            verbosity: { text: "medium" },
+            reasoning_effort: "high",
+            verbosity: "medium",
           })
           .to_return_json(body: {
             choices: [{
