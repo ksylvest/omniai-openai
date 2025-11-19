@@ -222,5 +222,91 @@ RSpec.describe OmniAI::OpenAI::Chat do
 
       it { expect(completion.text).to eql("They are a photo of a cat and a photo of a dog.") }
     end
+
+    context "with reasoning effort parameter" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, reasoning:) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Write a haiku about code." }
+      let(:reasoning) { { effort: "low" } }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+          .with(body: {
+            messages: [{ role: "user", content: [{ type: "text", text: "Write a haiku about code." }] }],
+            model:,
+            reasoning: { effort: "low" },
+          })
+          .to_return_json(body: {
+            choices: [{
+              index: 0,
+              message: {
+                role: "assistant",
+                content: "Code flows like water\nSilent logic intertwines\nBugs surface at dawn",
+              },
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Code flows like water\nSilent logic intertwines\nBugs surface at dawn") }
+    end
+
+    context "with verbosity text parameter" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, verbosity:) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Explain quantum computing." }
+      let(:verbosity) { { text: "low" } }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+          .with(body: {
+            messages: [{ role: "user", content: [{ type: "text", text: "Explain quantum computing." }] }],
+            model:,
+            verbosity: { text: "low" },
+          })
+          .to_return_json(body: {
+            choices: [{
+              index: 0,
+              message: {
+                role: "assistant",
+                content: "Quantum computers use qubits.",
+              },
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Quantum computers use qubits.") }
+    end
+
+    context "with both reasoning and verbosity parameters" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, reasoning:, verbosity:) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Solve this problem." }
+      let(:reasoning) { { effort: "high" } }
+      let(:verbosity) { { text: "medium" } }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+          .with(body: {
+            messages: [{ role: "user", content: [{ type: "text", text: "Solve this problem." }] }],
+            model:,
+            reasoning: { effort: "high" },
+            verbosity: { text: "medium" },
+          })
+          .to_return_json(body: {
+            choices: [{
+              index: 0,
+              message: {
+                role: "assistant",
+                content: "Here is the solution...",
+              },
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Here is the solution...") }
+    end
   end
 end

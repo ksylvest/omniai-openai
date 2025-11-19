@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniai-openai (2.6.2)
+    omniai-openai (2.6.3)
       event_stream_parser
       omniai (~> 2.6)
       zeitwerk
@@ -51,7 +51,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    omniai (2.9.1)
+    omniai (2.9.2)
       base64
       event_stream_parser
       http
@@ -78,7 +78,7 @@ GEM
     rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.6)
+    rspec-mocks (3.13.7)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.6)
@@ -110,7 +110,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.13.1)
+    simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
