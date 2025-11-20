@@ -25,7 +25,7 @@ format = OmniAI::Schema.format(name: "Contact", schema: OmniAI::Schema.object(
       )
     ),
   },
-  required: %i[name]
+  required: %i[name relationship addresses]
 ))
 
 response = client.chat(format:) do |prompt|
