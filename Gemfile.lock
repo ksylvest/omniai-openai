@@ -4,6 +4,7 @@ PATH
     omniai-openai (2.6.5)
       event_stream_parser
       omniai (~> 2.6)
+      openssl
       zeitwerk
 
 GEM
@@ -57,6 +58,7 @@ GEM
       http
       logger
       zeitwerk
+    openssl (3.3.2)
     parallel (1.27.0)
     parser (3.3.10.0)
       ast (~> 2.4.1)
