@@ -12,18 +12,19 @@ RSpec.describe OmniAI::OpenAI::Chat do
       let(:prompt) { "Tell me a joke!" }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Tell me a joke!" }] }],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
             model:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "Two elephants fall off a cliff. Boom! Boom!",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
             }],
           })
       end
@@ -40,21 +41,20 @@ RSpec.describe OmniAI::OpenAI::Chat do
       end
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [
-              { role: "system", content: [{ type: "text", text: "You are a helpful assistant." }] },
-              { role: "user", content: [{ type: "text", text: "What is the capital of Canada?" }] },
-            ],
+            instructions: "You are a helpful assistant.",
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "What is the capital of Canada?" }],
+            }],
             model:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "The capital of Canada is Ottawa.",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "The capital of Canada is Ottawa." }],
             }],
           })
       end
@@ -70,19 +70,20 @@ RSpec.describe OmniAI::OpenAI::Chat do
       let(:temperature) { 2.0 }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Pick a number between 1 and 5." }] }],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Pick a number between 1 and 5." }],
+            }],
             model:,
             temperature:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "3",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "3" }],
             }],
           })
       end
@@ -98,18 +99,19 @@ RSpec.describe OmniAI::OpenAI::Chat do
       let(:temperature) { 2.0 }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Pick a number between 1 and 5." }] }],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Pick a number between 1 and 5." }],
+            }],
             model:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "3",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "3" }],
             }],
           })
       end
@@ -128,22 +130,21 @@ RSpec.describe OmniAI::OpenAI::Chat do
       end
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [
-              { role: "system", content: [{ type: "text", text: OmniAI::Chat::JSON_PROMPT }] },
-              { role: "user", content: [{ type: "text", text: "What is the name of the dummer for the Beatles?" }] },
-            ],
+            instructions: OmniAI::Chat::JSON_PROMPT,
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "What is the name of the dummer for the Beatles?" }],
+            }],
             model:,
-            response_format: { type: "json_object" },
+            text: { format: { type: "json_object" } },
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: '{ "name": "Ringo" }',
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: '{ "name": "Ringo" }' }],
             }],
           })
       end
@@ -159,20 +160,44 @@ RSpec.describe OmniAI::OpenAI::Chat do
       let(:chunks) { [] }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [
-              { role: "user", content: [{ type: "text", text: "Tell me a story." }] },
-            ],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a story." }],
+            }],
             model:,
             stream: true,
-            stream_options: { include_usage: true },
           })
           .to_return(body: <<~STREAM)
-            data: #{JSON.generate({ choices: [{ index: 0, delta: { role: 'assistant', content: 'Hello' } }] })}\n
-            data: #{JSON.generate({ choices: [{ index: 0, delta: { role: 'assistant', content: ' ' } }] })}\n
-            data: #{JSON.generate({ choices: [{ index: 0, delta: { role: 'assistant', content: 'World' } }] })}\n
-            data: [DONE]\n
+            event: response.output_text.delta
+            data: #{JSON.generate({
+              delta: 'Hello',
+            })}
+
+            event: response.output_text.delta
+            data: #{JSON.generate({
+              type: 'response.output_text.delta',
+              delta: ' ',
+            })}
+
+            event: response.output_text.delta
+            data: #{JSON.generate({
+              delta: 'World',
+            })}
+
+            event: response.completed
+            data: #{JSON.generate({
+              response: {
+                output: [{
+                  type: 'message',
+                  role: 'assistant',
+                  content: [{ type: 'output_text', text: 'Hello World' }],
+                }],
+              },
+            })}
+
+            data: [DONE]
           STREAM
       end
 
@@ -194,28 +219,26 @@ RSpec.describe OmniAI::OpenAI::Chat do
       end
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [
+            input: [
               {
                 role: "user",
                 content: [
-                  { type: "text", text: "What are these photos of?" },
-                  { type: "image_url", image_url: { url: "https://localhost/cat.jpg" } },
-                  { type: "image_url", image_url: { url: "https://localhost/dog.jpg" } },
-                  { type: "image_url", image_url: { url: "data:image/jpeg;base64," } },
+                  { type: "input_text", text: "What are these photos of?" },
+                  { type: "input_image", image_url: "https://localhost/cat.jpg" },
+                  { type: "input_image", image_url: "https://localhost/dog.jpg" },
+                  { type: "input_image", image_data: "", filename: File.basename(io) },
                 ],
               },
             ],
             model:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "They are a photo of a cat and a photo of a dog.",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "They are a photo of a cat and a photo of a dog." }],
             }],
           })
       end
@@ -223,90 +246,62 @@ RSpec.describe OmniAI::OpenAI::Chat do
       it { expect(completion.text).to eql("They are a photo of a cat and a photo of a dog.") }
     end
 
-    context "with reasoning effort parameter" do
+    context "with a reasoning option" do
       subject(:completion) { described_class.process!(prompt, client:, model:, reasoning:) }
 
       let(:model) { described_class::Model::GPT_5_1 }
-      let(:prompt) { "Write a haiku about code." }
-      let(:reasoning) { { effort: "low" } }
+      let(:prompt) { "Tell me a joke!" }
+      let(:reasoning) { { effort: "medium" } }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Write a haiku about code." }] }],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
             model:,
-            reasoning_effort: "low",
+            reasoning:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "Code flows like water\nSilent logic intertwines\nBugs surface at dawn",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
             }],
           })
       end
 
-      it { expect(completion.text).to eql("Code flows like water\nSilent logic intertwines\nBugs surface at dawn") }
+      it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
     end
 
-    context "with verbosity text parameter" do
-      subject(:completion) { described_class.process!(prompt, client:, model:, verbosity:) }
+    context "with a text option" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, text:) }
 
       let(:model) { described_class::Model::GPT_5_1 }
-      let(:prompt) { "Explain quantum computing." }
-      let(:verbosity) { { text: "low" } }
+      let(:prompt) { "Tell me a joke!" }
+      let(:text) { { verbosity: "medium" } }
 
       before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        stub_request(:post, "https://api.openai.com/v1/responses")
           .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Explain quantum computing." }] }],
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
             model:,
-            verbosity: "low",
+            text:,
           })
           .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "Quantum computers use qubits.",
-              },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
             }],
           })
       end
 
-      it { expect(completion.text).to eql("Quantum computers use qubits.") }
-    end
-
-    context "with both reasoning and verbosity parameters" do
-      subject(:completion) { described_class.process!(prompt, client:, model:, reasoning:, verbosity:) }
-
-      let(:model) { described_class::Model::GPT_5_1 }
-      let(:prompt) { "Solve this problem." }
-      let(:reasoning) { { effort: "high" } }
-      let(:verbosity) { { text: "medium" } }
-
-      before do
-        stub_request(:post, "https://api.openai.com/v1/chat/completions")
-          .with(body: {
-            messages: [{ role: "user", content: [{ type: "text", text: "Solve this problem." }] }],
-            model:,
-            reasoning_effort: "high",
-            verbosity: "medium",
-          })
-          .to_return_json(body: {
-            choices: [{
-              index: 0,
-              message: {
-                role: "assistant",
-                content: "Here is the solution...",
-              },
-            }],
-          })
-      end
-
-      it { expect(completion.text).to eql("Here is the solution...") }
+      it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
     end
   end
 end

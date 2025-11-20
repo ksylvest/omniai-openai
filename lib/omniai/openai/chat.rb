@@ -12,8 +12,6 @@ module OmniAI
     #   end
     #   completion.choice.message.content # '...'
     class Chat < OmniAI::Chat
-      DEFAULT_STREAM_OPTIONS = { include_usage: ENV.fetch("OMNIAI_STREAM_USAGE", "on").eql?("on") }.freeze
-
       module ResponseFormat
         TEXT_TYPE = "text"
         JSON_TYPE = "json_object"
@@ -53,9 +51,57 @@ module OmniAI
         O3 = "o3"
       end
 
-      DEFAULT_MODEL = Model::GPT_4_1
+      DEFAULT_MODEL = Model::GPT_5_1
+
+      # @return [Context]
+      CONTEXT = Context.build do |context|
+        context.serializers[:choice] = ChoiceSerializer.method(:serialize)
+        context.deserializers[:choice] = ChoiceSerializer.method(:deserialize)
+        context.serializers[:message] = MessageSerializer.method(:serialize)
+        context.deserializers[:message] = MessageSerializer.method(:deserialize)
+        context.serializers[:text] = TextSerializer.method(:serialize)
+        context.deserializers[:text] = TextSerializer.method(:deserialize)
+        context.serializers[:response] = ResponseSerializer.method(:serialize)
+        context.deserializers[:response] = ResponseSerializer.method(:deserialize)
+        context.deserializers[:content] = ContentSerializer.method(:deserialize)
+        context.serializers[:file] = FileSerializer.method(:serialize)
+        context.serializers[:url] = URLSerializer.method(:serialize)
+        context.serializers[:tool] = ToolSerializer.method(:serialize)
+        context.serializers[:tool_call] = ToolCallSerializer.method(:serialize)
+        context.deserializers[:tool_call] = ToolCallSerializer.method(:deserialize)
+        context.serializers[:tool_call_result] = ToolCallResultSerializer.method(:serialize)
+        context.deserializers[:tool_call_result] = ToolCallResultSerializer.method(:deserialize)
+        context.serializers[:tool_call_message] = ToolCallMessageSerializer.method(:serialize)
+        context.deserializers[:tool_call_message] = ToolCallMessageSerializer.method(:deserialize)
+      end
 
     protected
+
+      # @return [Context]
+      def context
+        CONTEXT
+      end
+
+      # @return [Array<Hash>]
+      def input
+        @prompt
+          .messages
+          .reject(&:system?)
+          .map { |message| message.serialize(context:) }
+      end
+
+      # @return [String, nil]
+      def instructions
+        parts = @prompt
+          .messages
+          .filter(&:system?)
+          .filter(&:text?)
+          .map(&:text)
+
+        return if parts.empty?
+
+        parts.join("\n\n")
+      end
 
       # @return [Float, nil]
       def temperature
@@ -77,71 +123,61 @@ module OmniAI
       # @return [Hash]
       def payload
         OmniAI::OpenAI.config.chat_options.merge({
-          messages: @prompt.serialize,
-          model: @model,
-          response_format:,
+          instructions:,
+          input:,
+          model: @model || DEFAULT_MODEL,
           stream: stream? || nil,
-          stream_options: (DEFAULT_STREAM_OPTIONS if stream?),
           temperature:,
-          tools: (@tools.map(&:serialize) if @tools&.any?),
-          reasoning_effort: reasoning_effort_payload,
-          verbosity: verbosity_payload,
-        }.merge(@kwargs || {})).compact
+          tools:,
+          text:,
+          reasoning:,
+        }).compact
+      end
+
+      # @return [Array<Hash>]
+      def tools
+        return unless @tools&.any?
+
+        @tools.map { |tool| tool.serialize(context:) }
       end
 
       # @return [String]
       def path
-        "#{@client.api_prefix}/#{OmniAI::OpenAI::Client::VERSION}/chat/completions"
+        "#{@client.api_prefix}/#{OmniAI::OpenAI::Client::VERSION}/responses"
+      end
+
+      # @return [Hash]
+      def text
+        options = @options.fetch(:text, {}).merge(format:).compact
+        options unless options.empty?
+      end
+
+      # @return [Hash]
+      def reasoning
+        options = @options.fetch(:reasoning, {})
+        options unless options.empty?
       end
 
       # @raise [ArgumentError]
       #
       # @return [Hash, nil]
-      def response_format
+      def format
         return if @format.nil?
 
         case @format
         when :text then { type: ResponseFormat::TEXT_TYPE }
         when :json then { type: ResponseFormat::JSON_TYPE }
-        when OmniAI::Schema::Format then { type: ResponseFormat::SCHEMA_TYPE, json_schema: @format.serialize }
+        when OmniAI::Schema::Format
+          @format.serialize.merge({ type: ResponseFormat::SCHEMA_TYPE, strict: true })
         else raise ArgumentError, "unknown format=#{@format}"
         end
       end
 
-      # @raise [ArgumentError]
-      #
-      # @return [String, nil]
-      def reasoning_effort_payload
-        return if @reasoning.nil?
-
-        effort = @reasoning[:effort] || @reasoning["effort"]
-        return if effort.nil?
-
-        valid_efforts = [ReasoningEffort::NONE, ReasoningEffort::LOW, ReasoningEffort::MEDIUM, ReasoningEffort::HIGH]
-        unless valid_efforts.include?(effort)
-          raise ArgumentError,
-            "reasoning effort must be one of #{valid_efforts.join(', ')}"
+      # @return [Array<ToolCallMessage>]
+      def build_tool_call_messages(tool_call_list)
+        tool_call_list.map do |tool_call|
+          ToolCallMessage.new(tool_call_id: tool_call.id, content: execute_tool_call(tool_call))
         end
-
-        effort
-      end
-
-      # @raise [ArgumentError]
-      #
-      # @return [String, nil]
-      def verbosity_payload
-        return if @verbosity.nil?
-
-        text = @verbosity[:text] || @verbosity["text"]
-        return if text.nil?
-
-        valid_text_levels = [VerbosityText::LOW, VerbosityText::MEDIUM, VerbosityText::HIGH]
-        unless valid_text_levels.include?(text)
-          raise ArgumentError,
-            "verbosity text must be one of #{valid_text_levels.join(', ')}"
-        end
-
-        text
       end
     end
   end

@@ -33,7 +33,7 @@ class WeatherTool < OmniAI::Tool
   parameter :lat, :number, description: "The latitude of the location."
   parameter :lng, :number, description: "The longitude of the location."
   parameter :unit, :string, enum: %w[Celsius Fahrenheit], description: "The unit of measurement."
-  required %i[lat lng]
+  required %i[lat lng unit]
 
   # @param lat [Float]
   # @param lng [Float]
