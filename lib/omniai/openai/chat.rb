@@ -32,6 +32,7 @@ module OmniAI
       end
 
       module Model
+        GPT_5_2 = "gpt-5.2"
         GPT_5_1 = "gpt-5.1"
         GPT_5 = "gpt-5"
         GPT_5_MINI = "gpt-5-mini"
@@ -51,7 +52,7 @@ module OmniAI
         O3 = "o3"
       end
 
-      DEFAULT_MODEL = Model::GPT_5_1
+      DEFAULT_MODEL = Model::GPT_5_2
 
       # @return [Context]
       CONTEXT = Context.build do |context|
@@ -112,6 +113,7 @@ module OmniAI
           Model::GPT_5_MINI,
           Model::GPT_5_NANO,
           Model::GPT_5_1,
+          Model::GPT_5_2,
           Model::O1_MINI,
           Model::O1,
           Model::O3_MINI,
