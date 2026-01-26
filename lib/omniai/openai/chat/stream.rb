@@ -13,7 +13,7 @@ module OmniAI
           response = {}
 
           @chunks.each do |chunk|
-            parser.feed(chunk) do |type, data, _id|
+            parser.feed(chunk.b) do |type, data, _id|
               case type
               when /response\.(.*)_text\.delta/
                 block.call(OmniAI::Chat::Delta.new(text: JSON.parse(data)["delta"]))
