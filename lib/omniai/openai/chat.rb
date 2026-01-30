@@ -74,6 +74,8 @@ module OmniAI
         context.deserializers[:tool_call_result] = ToolCallResultSerializer.method(:deserialize)
         context.serializers[:tool_call_message] = ToolCallMessageSerializer.method(:serialize)
         context.deserializers[:tool_call_message] = ToolCallMessageSerializer.method(:deserialize)
+        context.serializers[:thinking] = ThinkingSerializer.method(:serialize)
+        context.deserializers[:thinking] = ThinkingSerializer.method(:deserialize)
       end
 
     protected
@@ -88,7 +90,7 @@ module OmniAI
         @prompt
           .messages
           .reject(&:system?)
-          .map { |message| message.serialize(context:) }
+          .filter_map { |message| message.serialize(context:) }
       end
 
       # @return [String, nil]
@@ -155,9 +157,24 @@ module OmniAI
       end
 
       # @return [Hash]
+      # Accepts unified `thinking:` option and translates to OpenAI's `reasoning:` format.
+      # Example: `thinking: { effort: "high" }` becomes `reasoning: { effort: "high", summary: "auto" }`
       def reasoning
-        options = @options.fetch(:reasoning, {})
-        options unless options.empty?
+        # Support both native `reasoning:` and unified `thinking:` options
+        options = @options[:reasoning] || translate_thinking_to_reasoning
+        options unless options.nil? || options.empty?
+      end
+
+      # Translates unified thinking option to OpenAI reasoning format
+      # @return [Hash, nil]
+      def translate_thinking_to_reasoning
+        thinking = @options[:thinking]
+        return unless thinking
+
+        case thinking
+        when true then { effort: ReasoningEffort::HIGH, summary: "auto" }
+        when Hash then { summary: "auto" }.merge(thinking)
+        end
       end
 
       # @raise [ArgumentError]

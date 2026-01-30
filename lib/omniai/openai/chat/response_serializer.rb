@@ -25,7 +25,7 @@ module OmniAI
         # @return [OmniAI::Chat::Response]
         def self.deserialize(data, context:)
           usage = OmniAI::Chat::Usage.deserialize(data["usage"], context:) if data["usage"]
-          choices = data["output"].map { |choice_data| OmniAI::Chat::Choice.deserialize(choice_data, context:) }
+          choices = data["output"].filter_map { |choice_data| OmniAI::Chat::Choice.deserialize(choice_data, context:) }
 
           OmniAI::Chat::Response.new(data:, choices:, usage:)
         end

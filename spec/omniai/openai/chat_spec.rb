@@ -275,6 +275,62 @@ RSpec.describe OmniAI::OpenAI::Chat do
       it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
     end
 
+    context "with thinking: true option" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, thinking: true) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Tell me a joke!" }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
+            model:,
+            reasoning: { effort: "high", summary: "auto" },
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
+    end
+
+    context "with thinking: { effort: 'low' } option" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, thinking: { effort: "low" }) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Tell me a joke!" }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
+            model:,
+            reasoning: { effort: "low", summary: "auto" },
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
+    end
+
     context "with a text option" do
       subject(:completion) { described_class.process!(prompt, client:, model:, text:) }
 
