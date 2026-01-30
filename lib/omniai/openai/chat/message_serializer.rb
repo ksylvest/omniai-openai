@@ -30,11 +30,14 @@ module OmniAI
         # @param message [OmniAI::Chat::Message]
         # @param context [OmniAI::Context]
         #
-        # @return [Hash]
+        # @return [Hash, nil]
         def self.serialize_for_content(message, context:)
           role = message.role
           direction = message.direction
-          parts = arrayify(message.content)
+          # Filter out thinking content - OpenAI doesn't accept it in input messages
+          parts = arrayify(message.content).reject { |part| part.is_a?(OmniAI::Chat::Thinking) }
+
+          return if parts.empty?
 
           content = parts.map do |part|
             case part
@@ -54,7 +57,17 @@ module OmniAI
           case data["type"]
           when "message" then deserialize_for_content(data, context:)
           when "function_call" then deserialize_for_tool_call(data, context:)
+          when "reasoning" then deserialize_for_reasoning(data, context:)
           end
+        end
+
+        # @param data [Hash]
+        # @param context [OmniAI::Context]
+        #
+        # @return [OmniAI::Chat::Message]
+        def self.deserialize_for_reasoning(data, context:)
+          thinking = OmniAI::Chat::Thinking.deserialize(data, context:)
+          OmniAI::Chat::Message.new(role: OmniAI::Chat::Role::ASSISTANT, content: [thinking])
         end
 
         # @param data [Hash]
