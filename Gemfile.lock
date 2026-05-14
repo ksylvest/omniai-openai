@@ -58,7 +58,7 @@ GEM
       http (~> 5)
       logger
       zeitwerk
-    openssl (4.0.1)
+    openssl (4.0.2)
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
