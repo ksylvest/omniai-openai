@@ -21,6 +21,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
             model:,
           })
           .to_return_json(body: {
+            status: "completed",
             output: [{
               type: "message",
               role: "assistant",
@@ -30,6 +31,35 @@ RSpec.describe OmniAI::OpenAI::Chat do
       end
 
       it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
+      it { expect(completion.finish_reason.reason).to eq(:stop) }
+    end
+
+    context "when the response is incomplete due to max output tokens" do
+      let(:prompt) { "Tell me a joke!" }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
+            model:,
+          })
+          .to_return_json(body: {
+            status: "incomplete",
+            incomplete_details: { reason: "max_output_tokens" },
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a" }],
+            }],
+          })
+      end
+
+      it "prefers incomplete_details.reason over status" do
+        expect(completion.finish_reason.reason).to eq(:length)
+      end
     end
 
     context "with an advanced prompt" do
@@ -189,6 +219,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
             event: response.completed
             data: #{JSON.generate({
               response: {
+                status: 'completed',
                 output: [{
                   type: 'message',
                   role: 'assistant',
@@ -202,6 +233,7 @@ RSpec.describe OmniAI::OpenAI::Chat do
       end
 
       it { expect(completion.text).to eql("Hello World") }
+      it { expect(completion.finish_reason.reason).to eq(:stop) }
     end
 
     context "when using files / URLs" do
