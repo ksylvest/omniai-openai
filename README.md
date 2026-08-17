@@ -109,12 +109,15 @@ completion.content # 'The capital of Canada is Ottawa.'
 
 #### Model
 
-`model` takes an optional string (default is `gpt-4o`):
+`model` takes an optional string (default is `gpt-5.2`):
 
 ```ruby
-completion = client.chat('How fast is a cheetah?', model: OmniAI::OpenAI::Chat::Model::GPT_3_5_TURBO)
+completion = client.chat('How fast is a cheetah?', model: OmniAI::OpenAI::Chat::Model::GPT_5_5)
 completion.content # 'A cheetah can reach speeds over 100 km/h.'
 ```
+
+Note that `temperature` is not supported by every model (e.g. `gpt-5`, `gpt-5.5` and the `o`-series). It is
+omitted from the request for those models rather than sent and rejected — see `TEMPERATURE_UNSUPPORTED_MODELS`.
 
 [OpenAI API Reference `model`](https://platform.openai.com/docs/api-reference/chat/create#chat-create-model)
 
@@ -195,6 +198,23 @@ client.chat("What are the prime factors of 1234567?", model: "o3-mini", thinking
 ```
 
 [OpenAI API Reference `reasoning`](https://platform.openai.com/docs/guides/reasoning)
+
+#### Other Responses API Options
+
+Any option that is not modelled explicitly is forwarded to the Responses API verbatim, so parameters the gem
+does not wrap are still reachable:
+
+```ruby
+completion = client.chat('Summarize this.', model: 'gpt-5.5', max_output_tokens: 512, store: false)
+
+# continue a stored conversation
+completion = client.chat('And the next one?', previous_response_id: 'resp_123')
+```
+
+This covers `max_output_tokens`, `previous_response_id`, `store`, `parallel_tool_calls`, `metadata`,
+`truncation`, `top_p`, `service_tier`, and `prompt_cache_key`, among others.
+
+[OpenAI API Reference `responses`](https://platform.openai.com/docs/api-reference/responses/create)
 
 ### Transcribe
 
@@ -281,7 +301,7 @@ client.speak('She sells seashells by the seashore.', voice: OmniAI::OpenAI::Spea
 
 #### Model
 
-`model` is optional and must be either `tts-1` or `tts-1-hd` (default):
+`model` is optional and is one of `tts-1`, `tts-1-hd`, or `gpt-4o-mini-tts` (default):
 
 ```ruby
 client.speak('I saw a kitten eating chicken in the kitchen.', format: OmniAI::OpenAI::Speak::Model::TTS_1)

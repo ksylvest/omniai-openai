@@ -13,14 +13,17 @@ module OmniAI
       module Voice
         ALLOY = "alloy" # https://platform.openai.com/docs/guides/text-to-speech/alloy
         ASH = "ash" # https://platform.openai.com/docs/guides/text-to-speech/ash
-        BALLARD = "ballard" # https://platform.openai.com/docs/guides/text-to-speech/ballard
+        BALLAD = "ballad" # https://platform.openai.com/docs/guides/text-to-speech/ballad
+        CEDAR = "cedar" # https://platform.openai.com/docs/guides/text-to-speech/cedar
         CORAL = "coral" # https://platform.openai.com/docs/guides/text-to-speech/coral
         ECHO = "echo" # https://platform.openai.com/docs/guides/text-to-speech/echo
         FABLE = "fable" # https://platform.openai.com/docs/guides/text-to-speech/fable
+        MARIN = "marin" # https://platform.openai.com/docs/guides/text-to-speech/marin
         NOVA = "nova" # https://platform.openai.com/docs/guides/text-to-speech/nova
         ONYX = "onyx" # https://platform.openai.com/docs/guides/text-to-speech/onyx
         SAGE = "sage" # https://platform.openai.com/docs/guides/text-to-speech/sage
         SHIMMER = "shimmer" # https://platform.openai.com/docs/guides/text-to-speech/shimmer
+        VERSE = "verse" # https://platform.openai.com/docs/guides/text-to-speech/verse
       end
 
       DEFAULT_MODEL = Model::GPT_4O_MINI_TTS
