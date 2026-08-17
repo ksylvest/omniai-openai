@@ -91,6 +91,100 @@ RSpec.describe OmniAI::OpenAI::Chat do
       it { expect(completion.text).to eql("3") }
     end
 
+    # Verified live 2026-08-16: gpt-5.1 accepts `temperature` on the Responses API. It was previously listed as
+    # unsupported, so a caller's temperature was silently dropped rather than sent.
+    context "with a temperature using a gpt-5.x model that supports" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, temperature:) }
+
+      let(:model) { described_class::Model::GPT_5_1 }
+      let(:prompt) { "Pick a number between 1 and 5." }
+      let(:temperature) { 2.0 }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Pick a number between 1 and 5." }],
+            }],
+            model:,
+            temperature:,
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "3" }],
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("3") }
+    end
+
+    # Verified live 2026-08-16: gpt-5.5 rejects `temperature` with `Unsupported parameter`.
+    context "with a temperature using a newer model that does not support" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, temperature:) }
+
+      let(:model) { described_class::Model::GPT_5_5 }
+      let(:prompt) { "Pick a number between 1 and 5." }
+      let(:temperature) { 2.0 }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Pick a number between 1 and 5." }],
+            }],
+            model:,
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "3" }],
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("3") }
+    end
+
+    context "with Responses API options the gem does not model explicitly" do
+      subject(:completion) do
+        described_class.process!(prompt, client:, model:, max_output_tokens: 24, store: false,
+          previous_response_id: "resp_123", parallel_tool_calls: false, metadata: { "key" => "value" })
+      end
+
+      let(:prompt) { "Tell me a joke!" }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
+            model:,
+            max_output_tokens: 24,
+            store: false,
+            previous_response_id: "resp_123",
+            parallel_tool_calls: false,
+            metadata: { "key" => "value" },
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
+            }],
+          })
+      end
+
+      it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
+    end
+
     context "with a temperature using a model that does not support" do
       subject(:completion) { described_class.process!(prompt, client:, model:, temperature:) }
 

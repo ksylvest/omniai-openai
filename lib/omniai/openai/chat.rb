@@ -32,11 +32,23 @@ module OmniAI
       end
 
       module Model
+        GPT_5_6_LUNA = "gpt-5.6-luna"
+        GPT_5_6_SOL = "gpt-5.6-sol"
+        GPT_5_6_TERRA = "gpt-5.6-terra"
+        GPT_5_5 = "gpt-5.5"
+        GPT_5_5_PRO = "gpt-5.5-pro"
+        GPT_5_4 = "gpt-5.4"
+        GPT_5_4_MINI = "gpt-5.4-mini"
+        GPT_5_4_NANO = "gpt-5.4-nano"
+        GPT_5_4_PRO = "gpt-5.4-pro"
+        GPT_5_3_CODEX = "gpt-5.3-codex"
         GPT_5_2 = "gpt-5.2"
+        GPT_5_2_PRO = "gpt-5.2-pro"
         GPT_5_1 = "gpt-5.1"
         GPT_5 = "gpt-5"
         GPT_5_MINI = "gpt-5-mini"
         GPT_5_NANO = "gpt-5-nano"
+        GPT_5_PRO = "gpt-5-pro"
         GPT_4_1 = "gpt-4.1"
         GPT_4_1_NANO = "gpt-4.1-nano"
         GPT_4_1_MINI = "gpt-4.1-mini"
@@ -53,6 +65,38 @@ module OmniAI
       end
 
       DEFAULT_MODEL = Model::GPT_5_2
+
+      # Models that reject `temperature` on the Responses API.
+      #
+      # OpenAI's support here is not patterned by version, so this cannot be a prefix rule: `gpt-5` and its
+      # mini/nano/pro variants reject `temperature`, `gpt-5.1` through `gpt-5.4` accept it, and `gpt-5.5`
+      # onwards rejects it again. Every entry below was verified live against the API on 2026-08-16 by issuing
+      # a request with `temperature` and checking for `Unsupported parameter`.
+      #
+      # Models absent from this list pass `temperature` through unchanged. That is deliberate: an unlisted
+      # model that rejects it surfaces a loud API error the caller can act on, whereas over-applying the guard
+      # would silently discard a caller's temperature.
+      TEMPERATURE_UNSUPPORTED_MODELS = [
+        Model::GPT_5_6_LUNA,
+        Model::GPT_5_6_SOL,
+        Model::GPT_5_6_TERRA,
+        Model::GPT_5_5,
+        Model::GPT_5_5_PRO,
+        Model::GPT_5_4_PRO,
+        Model::GPT_5_2_PRO,
+        Model::GPT_5,
+        Model::GPT_5_MINI,
+        Model::GPT_5_NANO,
+        Model::GPT_5_PRO,
+        Model::O1_MINI,
+        Model::O1,
+        Model::O3,
+        Model::O3_MINI,
+        Model::O4_MINI,
+      ].freeze
+
+      # Keys in `@options` consumed by dedicated builders below rather than sent verbatim.
+      RESERVED_OPTIONS = %i[text reasoning thinking].freeze
 
       # @return [Context]
       CONTEXT = Context.build do |context|
@@ -106,36 +150,38 @@ module OmniAI
         parts.join("\n\n")
       end
 
+      # @return [String]
+      def model
+        @model || DEFAULT_MODEL
+      end
+
       # @return [Float, nil]
       def temperature
         return if @temperature.nil?
-
-        return if [
-          Model::GPT_5,
-          Model::GPT_5_MINI,
-          Model::GPT_5_NANO,
-          Model::GPT_5_1,
-          Model::GPT_5_2,
-          Model::O1_MINI,
-          Model::O1,
-          Model::O3_MINI,
-        ].include?(@model)
+        return if TEMPERATURE_UNSUPPORTED_MODELS.include?(model)
 
         @temperature
       end
 
+      # Unrecognized options are passed through verbatim so callers can reach Responses API parameters the gem
+      # does not model explicitly (e.g. `max_output_tokens`, `previous_response_id`, `store`,
+      # `parallel_tool_calls`, `metadata`, `truncation`, `top_p`). Keys built by dedicated methods are excluded
+      # so they are not sent twice, and the explicit keys below win over any same-named passthrough.
+      #
       # @return [Hash]
       def payload
-        OmniAI::OpenAI.config.chat_options.merge({
-          instructions:,
-          input:,
-          model: @model || DEFAULT_MODEL,
-          stream: stream? || nil,
-          temperature:,
-          tools:,
-          text:,
-          reasoning:,
-        }).compact
+        OmniAI::OpenAI.config.chat_options
+          .merge(@options.except(*RESERVED_OPTIONS))
+          .merge({
+            instructions:,
+            input:,
+            model:,
+            stream: stream? || nil,
+            temperature:,
+            tools:,
+            text:,
+            reasoning:,
+          }).compact
       end
 
       # @return [Array<Hash>]

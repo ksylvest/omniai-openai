@@ -7,7 +7,10 @@ module OmniAI
       module Model
         WHISPER_1 = "whisper-1"
         GPT_4O_TRANSCRIBE = "gpt-4o-transcribe"
-        GPT_4O_MINI_TRANSCRIBE = "gpt-4-0-mini-transcribe"
+        GPT_4O_TRANSCRIBE_DIARIZE = "gpt-4o-transcribe-diarize"
+        GPT_4O_MINI_TRANSCRIBE = "gpt-4o-mini-transcribe"
+        GPT_TRANSCRIBE = "gpt-transcribe"
+        GPT_LIVE_TRANSCRIBE = "gpt-live-transcribe"
         WHISPER = WHISPER_1
       end
 
