@@ -18,7 +18,14 @@ module OmniAI
         def self.deserialize(data, *)
           # Deserialize without a context so the generic flat parse runs rather than recursing into this method.
           usage = OmniAI::Chat::Usage.deserialize(data)
-          usage.thinking_tokens = data.dig("output_tokens_details", "reasoning_tokens")
+
+          # Only overwrite when the vendor container is actually present. A payload produced by `Usage#serialize`
+          # carries base's own `thinking_tokens` key and no `output_tokens_details`, so assigning unconditionally
+          # would clobber a correctly-parsed value with nil and break the round-trip. `unless nil?` rather than
+          # `||=`, so a reported zero from the wire still wins over base's nil.
+          reasoning_tokens = data.dig("output_tokens_details", "reasoning_tokens")
+          usage.thinking_tokens = reasoning_tokens unless reasoning_tokens.nil?
+
           usage
         end
       end

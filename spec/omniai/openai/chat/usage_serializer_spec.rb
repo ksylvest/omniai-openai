@@ -78,5 +78,19 @@ RSpec.describe OmniAI::OpenAI::Chat::UsageSerializer do
         expect(deserialize.thinking_tokens).to be_nil
       end
     end
+
+    context "when round-tripping a base-serialized payload" do
+      # 'Usage#serialize' emits base's own 'thinking_tokens' key and no vendor container. Deserializing that back
+      # under this context must not clobber the parsed value with nil.
+      let(:data) do
+        OmniAI::Chat::Usage.new(input_tokens: 46, output_tokens: 1296, total_tokens: 1342, thinking_tokens: 444)
+          .serialize(context:)
+          .transform_keys(&:to_s)
+      end
+
+      it "preserves thinking_tokens" do
+        expect(deserialize.thinking_tokens).to be(444)
+      end
+    end
   end
 end
