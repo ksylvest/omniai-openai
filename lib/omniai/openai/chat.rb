@@ -109,6 +109,7 @@ module OmniAI
         context.serializers[:response] = ResponseSerializer.method(:serialize)
         context.deserializers[:response] = ResponseSerializer.method(:deserialize)
         context.deserializers[:content] = ContentSerializer.method(:deserialize)
+        context.deserializers[:usage] = UsageSerializer.method(:deserialize)
         context.serializers[:file] = FileSerializer.method(:serialize)
         context.serializers[:url] = URLSerializer.method(:serialize)
         context.serializers[:tool] = ToolSerializer.method(:serialize)
