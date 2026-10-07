@@ -9,6 +9,7 @@ module OmniAI
         TTS_1 = "tts-1"
         # @deprecated OpenAI shuts this down 2027-01-06.
         TTS_1_HD = "tts-1-hd"
+        # @deprecated OpenAI shuts down both its snapshots 2027-01-06 (the current DEFAULT_MODEL).
         GPT_4O_MINI_TTS = "gpt-4o-mini-tts"
       end
 

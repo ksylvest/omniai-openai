@@ -53,10 +53,15 @@ module OmniAI
         GPT_5_3_CODEX = "gpt-5.3-codex"
         GPT_5_2 = "gpt-5.2"
         GPT_5_2_PRO = "gpt-5.2-pro"
+        # @deprecated OpenAI shuts this down 2027-04-01; use GPT_6_SOL.
         GPT_5_1 = "gpt-5.1"
+        # @deprecated OpenAI shuts down its gpt-5-2025-08-07 snapshot 2026-12-11; use GPT_5_6_SOL.
         GPT_5 = "gpt-5"
+        # @deprecated OpenAI shuts down its gpt-5-mini-2025-08-07 snapshot 2026-12-11; use GPT_5_6_TERRA.
         GPT_5_MINI = "gpt-5-mini"
+        # @deprecated OpenAI shuts down its gpt-5-nano-2025-08-07 snapshot 2026-12-11; use GPT_5_6_LUNA.
         GPT_5_NANO = "gpt-5-nano"
+        # @deprecated OpenAI shuts down its gpt-5-pro-2025-10-06 snapshot 2026-12-11; use GPT_5_6_SOL.
         GPT_5_PRO = "gpt-5-pro"
         GPT_4_1 = "gpt-4.1"
         # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_LUNA.
@@ -70,7 +75,7 @@ module OmniAI
         GPT_4_TURBO = "gpt-4-turbo"
         # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_TERRA.
         GPT_3_5_TURBO = "gpt-3.5-turbo"
-        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
+        # @deprecated OpenAI shut this down 2025-10-27; use GPT_5_6_SOL.
         O1_MINI = "o1-mini"
         # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         O3_MINI = "o3-mini"
@@ -78,7 +83,7 @@ module OmniAI
         O4_MINI = "o4-mini"
         # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         O1 = "o1"
-        # @deprecated OpenAI shuts this down 2026-12-11; use GPT_5_6_SOL.
+        # @deprecated OpenAI shuts down its o3-2025-04-16 snapshot 2026-12-11; use GPT_5_6_SOL.
         O3 = "o3"
       end
 
