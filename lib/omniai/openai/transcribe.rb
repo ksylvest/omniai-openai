@@ -7,11 +7,15 @@ module OmniAI
       module Model
         # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         WHISPER_1 = "whisper-1"
+        # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         GPT_4O_TRANSCRIBE = "gpt-4o-transcribe"
+        # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         GPT_4O_TRANSCRIBE_DIARIZE = "gpt-4o-transcribe-diarize"
+        # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         GPT_4O_MINI_TRANSCRIBE = "gpt-4o-mini-transcribe"
         GPT_TRANSCRIBE = "gpt-transcribe"
         GPT_LIVE_TRANSCRIBE = "gpt-live-transcribe"
+        # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         WHISPER = WHISPER_1
       end
 

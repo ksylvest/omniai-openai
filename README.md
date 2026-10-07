@@ -173,7 +173,7 @@ response = client.chat("What is 25 * 25?", model: "gpt-5.6-sol", thinking: true)
 response = client.chat("What is 25 * 25?", model: "gpt-5.6-sol", reasoning: { effort: "high", summary: "auto" })
 ```
 
-**Reasoning Effort Levels** (`OmniAI::OpenAI::Chat::ReasoningEffort`): `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`. Support varies by model, e.g. `gpt-6-astra` rejects `none` and `gpt-6.1-sol` rejects `none` and `minimal`.
+**Reasoning Effort Levels** (`OmniAI::OpenAI::Chat::ReasoningEffort`): `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`. Support varies by model: GPT-6 models don't accept `minimal`, and `gpt-6-astra` and `gpt-6.1-sol` also reject `none`. Check the [model pages](https://developers.openai.com/api/docs/models/all).
 
 #### Accessing Reasoning Content
 

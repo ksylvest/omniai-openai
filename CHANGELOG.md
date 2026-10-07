@@ -5,18 +5,20 @@
 ### Added
 
 - GPT-6 model constants: `GPT_6_1_SOL`, `GPT_6_ASTRA`, `GPT_6_SOL`, `GPT_6_LUNA`. They are not in `TEMPERATURE_UNSUPPORTED_MODELS`; that needs a live check.
-- `ReasoningEffort::MINIMAL`, `XHIGH` and `MAX`. Support varies by model: `gpt-6-astra` rejects `none`, `gpt-6.1-sol` rejects `none` and `minimal`.
+- `ReasoningEffort::MINIMAL`, `XHIGH` and `MAX`. Support varies by model: GPT-6 models don't accept `minimal`, and `gpt-6-astra` and `gpt-6.1-sol` also reject `none`.
 
 ### Deprecated
 
-- Constants for models OpenAI is shutting down (dates per OpenAI's deprecations page):
-  - 2026-10-23: `GPT_4`, `GPT_4_TURBO`, `GPT_3_5_TURBO`, `GPT_4_1_NANO`, `O1`, `O1_MINI`, `O3_MINI`, `O4_MINI`
-  - 2026-12-11: `O3`
-  - 2027-01-06: `Speak::Model::TTS_1`, `TTS_1_HD`
-  - 2027-02-26: `Transcribe::Model::WHISPER_1` (the current `Transcribe::DEFAULT_MODEL`)
-  - 2027-04-01: `GPT_5_3_CODEX`, `GPT_5_4_NANO`
+Dates are from OpenAI's [deprecations page](https://developers.openai.com/api/docs/deprecations). The constants still resolve; they will be removed in a later release.
 
-  The constants still resolve; they will be removed in a later release.
+- Already shut down (2025-10-27): `O1_MINI`
+- 2026-10-23: `GPT_4`, `GPT_4_TURBO`, `GPT_3_5_TURBO`, `GPT_4_1_NANO`, `O1`, `O3_MINI`, `O4_MINI`
+- 2026-12-11, the dated snapshot behind each alias: `O3`, `GPT_5`, `GPT_5_MINI`, `GPT_5_NANO`, `GPT_5_PRO`
+- 2027-01-06: `Speak::Model::TTS_1`, `TTS_1_HD`, and both `gpt-4o-mini-tts` snapshots. That is `Speak::DEFAULT_MODEL`, so the default speech model may stop working that day.
+- 2027-02-26: `Transcribe::Model::WHISPER_1` / `WHISPER` (the current `Transcribe::DEFAULT_MODEL`), `GPT_4O_TRANSCRIBE`, `GPT_4O_MINI_TRANSCRIBE`, `GPT_4O_TRANSCRIBE_DIARIZE`
+- 2027-04-01: `GPT_5_1`, `GPT_5_3_CODEX`, `GPT_5_4_NANO`
+
+Changing either default is a behaviour change, so it belongs in its own release before those dates.
 
 ### Fixed
 
