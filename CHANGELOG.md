@@ -16,7 +16,7 @@ Dates are from OpenAI's [deprecations page](https://developers.openai.com/api/do
 - 2026-12-11, the dated snapshot behind each alias: `O3`, `GPT_5`, `GPT_5_MINI`, `GPT_5_NANO`, `GPT_5_PRO`
 - 2027-01-06: `Speak::Model::TTS_1`, `TTS_1_HD`, and both `gpt-4o-mini-tts` snapshots. That is `Speak::DEFAULT_MODEL`, so the default speech model may stop working that day.
 
-For the snapshot rows, OpenAI does not list the undated aliases (`o3`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5-pro`, `gpt-4o-mini-tts`), so it is unconfirmed whether they retire too. They are marked deprecated because no other snapshot is listed for them to resolve to.
+For the snapshot rows, OpenAI does not list the undated aliases (`o3`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5-pro`, `gpt-4o-mini-tts`), so it is unconfirmed whether they retire too. They are marked deprecated so callers see the risk.
 
 - 2027-02-26: `Transcribe::Model::WHISPER_1` / `WHISPER` (the current `Transcribe::DEFAULT_MODEL`), `GPT_4O_TRANSCRIBE`, `GPT_4O_MINI_TRANSCRIBE`, `GPT_4O_TRANSCRIBE_DIARIZE`
 - 2027-04-01: `GPT_5_1`, `GPT_5_3_CODEX`, `GPT_5_4_NANO`
