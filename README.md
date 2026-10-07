@@ -163,20 +163,17 @@ JSON.parse(completion.content) # { "name": "Ringo" }
 
 #### Reasoning
 
-OpenAI o1 and o3 models support reasoning, which provides a summary of the model's thought process.
+OpenAI reasoning models (GPT-5 and later) can return a summary of the model's thought process.
 
 ```ruby
 # Enable reasoning with unified thinking API
-response = client.chat("What is 25 * 25?", model: "o3-mini", thinking: true)
+response = client.chat("What is 25 * 25?", model: "gpt-5.6-sol", thinking: true)
 
 # Or use OpenAI-specific reasoning options
-response = client.chat("What is 25 * 25?", model: "o3-mini", reasoning: { effort: "high", summary: "auto" })
+response = client.chat("What is 25 * 25?", model: "gpt-5.6-sol", reasoning: { effort: "high", summary: "auto" })
 ```
 
-**Reasoning Effort Levels:**
-- `low` - Minimal reasoning
-- `medium` - Balanced reasoning
-- `high` - Maximum reasoning effort
+**Reasoning Effort Levels** (`OmniAI::OpenAI::Chat::ReasoningEffort`): `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`. Support varies by model, e.g. `gpt-6-astra` rejects `none` and `gpt-6.1-sol` rejects `none` and `minimal`.
 
 #### Accessing Reasoning Content
 
@@ -194,7 +191,7 @@ end
 #### Streaming with Reasoning
 
 ```ruby
-client.chat("What are the prime factors of 1234567?", model: "o3-mini", thinking: true, stream: $stdout)
+client.chat("What are the prime factors of 1234567?", model: "gpt-5.6-sol", thinking: true, stream: $stdout)
 ```
 
 [OpenAI API Reference `reasoning`](https://platform.openai.com/docs/guides/reasoning)
@@ -301,10 +298,10 @@ client.speak('She sells seashells by the seashore.', voice: OmniAI::OpenAI::Spea
 
 #### Model
 
-`model` is optional and is one of `tts-1`, `tts-1-hd`, or `gpt-4o-mini-tts` (default):
+`model` is optional and is one of `gpt-4o-mini-tts` (default), `tts-1` or `tts-1-hd` (both shut down 2027-01-06):
 
 ```ruby
-client.speak('I saw a kitten eating chicken in the kitchen.', format: OmniAI::OpenAI::Speak::Model::TTS_1)
+client.speak('I saw a kitten eating chicken in the kitchen.', model: OmniAI::OpenAI::Speak::Model::GPT_4O_MINI_TTS)
 ```
 
 [OpenAI API Refernce `model`](https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-model)

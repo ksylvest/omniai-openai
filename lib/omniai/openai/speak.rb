@@ -5,7 +5,9 @@ module OmniAI
     # An OpenAI transcribe implementation.
     class Speak < OmniAI::Speak
       module Model
+        # @deprecated OpenAI shuts this down 2027-01-06.
         TTS_1 = "tts-1"
+        # @deprecated OpenAI shuts this down 2027-01-06.
         TTS_1_HD = "tts-1-hd"
         GPT_4O_MINI_TTS = "gpt-4o-mini-tts"
       end

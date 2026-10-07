@@ -5,6 +5,7 @@ module OmniAI
     # An OpenAI transcribe implementation.
     class Transcribe < OmniAI::Transcribe
       module Model
+        # @deprecated OpenAI shuts this down 2027-02-26; use GPT_TRANSCRIBE.
         WHISPER_1 = "whisper-1"
         GPT_4O_TRANSCRIBE = "gpt-4o-transcribe"
         GPT_4O_TRANSCRIBE_DIARIZE = "gpt-4o-transcribe-diarize"

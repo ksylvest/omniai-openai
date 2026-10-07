@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniai-openai (3.2.0)
+    omniai-openai (3.3.0)
       event_stream_parser
       omniai (~> 3.8)
       openssl

@@ -20,9 +20,12 @@ module OmniAI
 
       module ReasoningEffort
         NONE = "none"
+        MINIMAL = "minimal"
         LOW = "low"
         MEDIUM = "medium"
         HIGH = "high"
+        XHIGH = "xhigh"
+        MAX = "max"
       end
 
       module VerbosityText
@@ -32,6 +35,10 @@ module OmniAI
       end
 
       module Model
+        GPT_6_1_SOL = "gpt-6.1-sol"
+        GPT_6_ASTRA = "gpt-6-astra"
+        GPT_6_SOL = "gpt-6-sol"
+        GPT_6_LUNA = "gpt-6-luna"
         GPT_5_6_LUNA = "gpt-5.6-luna"
         GPT_5_6_SOL = "gpt-5.6-sol"
         GPT_5_6_TERRA = "gpt-5.6-terra"
@@ -39,8 +46,10 @@ module OmniAI
         GPT_5_5_PRO = "gpt-5.5-pro"
         GPT_5_4 = "gpt-5.4"
         GPT_5_4_MINI = "gpt-5.4-mini"
+        # @deprecated OpenAI shuts this down 2027-04-01; use GPT_6_LUNA.
         GPT_5_4_NANO = "gpt-5.4-nano"
         GPT_5_4_PRO = "gpt-5.4-pro"
+        # @deprecated OpenAI shuts this down 2027-04-01; use GPT_6_SOL.
         GPT_5_3_CODEX = "gpt-5.3-codex"
         GPT_5_2 = "gpt-5.2"
         GPT_5_2_PRO = "gpt-5.2-pro"
@@ -50,17 +59,26 @@ module OmniAI
         GPT_5_NANO = "gpt-5-nano"
         GPT_5_PRO = "gpt-5-pro"
         GPT_4_1 = "gpt-4.1"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_LUNA.
         GPT_4_1_NANO = "gpt-4.1-nano"
         GPT_4_1_MINI = "gpt-4.1-mini"
         GPT_4O = "gpt-4o"
         GPT_4O_MINI = "gpt-4o-mini"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         GPT_4 = "gpt-4"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         GPT_4_TURBO = "gpt-4-turbo"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_TERRA.
         GPT_3_5_TURBO = "gpt-3.5-turbo"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         O1_MINI = "o1-mini"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         O3_MINI = "o3-mini"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_TERRA.
         O4_MINI = "o4-mini"
+        # @deprecated OpenAI shuts this down 2026-10-23; use GPT_5_6_SOL.
         O1 = "o1"
+        # @deprecated OpenAI shuts this down 2026-12-11; use GPT_5_6_SOL.
         O3 = "o3"
       end
 

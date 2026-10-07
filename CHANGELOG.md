@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.3.0
+
+### Added
+
+- GPT-6 model constants: `GPT_6_1_SOL`, `GPT_6_ASTRA`, `GPT_6_SOL`, `GPT_6_LUNA`. They are not in `TEMPERATURE_UNSUPPORTED_MODELS`; that needs a live check.
+- `ReasoningEffort::MINIMAL`, `XHIGH` and `MAX`. Support varies by model: `gpt-6-astra` rejects `none`, `gpt-6.1-sol` rejects `none` and `minimal`.
+
+### Deprecated
+
+- Constants for models OpenAI is shutting down (dates per OpenAI's deprecations page):
+  - 2026-10-23: `GPT_4`, `GPT_4_TURBO`, `GPT_3_5_TURBO`, `GPT_4_1_NANO`, `O1`, `O1_MINI`, `O3_MINI`, `O4_MINI`
+  - 2026-12-11: `O3`
+  - 2027-01-06: `Speak::Model::TTS_1`, `TTS_1_HD`
+  - 2027-02-26: `Transcribe::Model::WHISPER_1` (the current `Transcribe::DEFAULT_MODEL`)
+  - 2027-04-01: `GPT_5_3_CODEX`, `GPT_5_4_NANO`
+
+  The constants still resolve; they will be removed in a later release.
+
+### Fixed
+
+- README: reasoning examples used `o3-mini`, and the Speak model example passed a model as `format:`.
+
 ## 3.2.0
 
 ### Added
