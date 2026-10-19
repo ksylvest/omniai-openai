@@ -185,6 +185,34 @@ RSpec.describe OmniAI::OpenAI::Chat do
       it { expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!") }
     end
 
+    context "with a cache option" do
+      subject(:completion) { described_class.process!(prompt, client:, model:, cache: :system) }
+
+      let(:prompt) { "Tell me a joke!" }
+
+      before do
+        stub_request(:post, "https://api.openai.com/v1/responses")
+          .with(body: {
+            input: [{
+              role: "user",
+              content: [{ type: "input_text", text: "Tell me a joke!" }],
+            }],
+            model:,
+          })
+          .to_return_json(body: {
+            output: [{
+              type: "message",
+              role: "assistant",
+              content: [{ type: "output_text", text: "Two elephants fall off a cliff. Boom! Boom!" }],
+            }],
+          })
+      end
+
+      it "does not send it, since OpenAI caches prompt prefixes automatically" do
+        expect(completion.text).to eql("Two elephants fall off a cliff. Boom! Boom!")
+      end
+    end
+
     context "with a temperature using a model that does not support" do
       subject(:completion) { described_class.process!(prompt, client:, model:, temperature:) }
 
