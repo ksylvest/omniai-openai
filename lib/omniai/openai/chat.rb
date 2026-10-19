@@ -118,8 +118,9 @@ module OmniAI
         Model::O4_MINI,
       ].freeze
 
-      # Keys in `@options` consumed by dedicated builders below rather than sent verbatim.
-      RESERVED_OPTIONS = %i[text reasoning thinking].freeze
+      # Keys in `@options` consumed by dedicated builders below rather than sent verbatim. `cache` is dropped: OpenAI
+      # caches prompt prefixes automatically.
+      RESERVED_OPTIONS = %i[text reasoning thinking cache].freeze
 
       # @return [Context]
       CONTEXT = Context.build do |context|

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.1
+
+### Fixed
+
+- `cache:` is no longer sent to OpenAI as an unknown parameter. OpenAI caches prompt prefixes automatically, so the option is ignored; callers can pass the same `cache:` to every provider.
+
 ## 3.3.0
 
 ### Added
