@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.4.0
+
+### Added
+
+- `GPT_6_1_TERRA` (`gpt-6.1-terra`). It accepts `none` through `max` reasoning effort but not `minimal`. It is not in `TEMPERATURE_UNSUPPORTED_MODELS`; that needs a live check, as for the other GPT-6 models.
+
+### Deprecated
+
+From OpenAI's 2026-10-14 notice: these shut down 2027-01-14, replacement `gpt-6-luna`. As with the 2026-12-11 rows in 3.3.0, OpenAI lists only the dated snapshots, so it is unconfirmed whether the undated aliases retire too.
+
+- `GPT_4O`, `GPT_4O_MINI`, `GPT_4_1`, `GPT_4_1_MINI`
+
 ## 3.3.1
 
 ### Fixed
